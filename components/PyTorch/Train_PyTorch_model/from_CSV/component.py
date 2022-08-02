@@ -39,6 +39,8 @@ def train_pytorch_model_from_csv(
     if not loss_function:
         raise ValueError(f'Loss function "{loss_function_name}" was not found.')
 
+
+
     class CsvDataset(torch.utils.data.Dataset):
 
         def __init__(self, file_path: str, label_column_name: str, drop_nan_clumns_or_rows: str = 'columns'):
@@ -46,14 +48,16 @@ def train_pytorch_model_from_csv(
             # Preventing error: default_collate: batch must contain tensors, numpy arrays, numbers, dicts or lists; found object
             if drop_nan_clumns_or_rows == 'columns':
                 non_nan_data = dataframe.dropna(axis='columns')
-                removed_columns = set(dataframe.columns) - set(non_nan_data.columns)
-                if removed_columns:
-                    print('Skipping columns with NaNs: ' + str(removed_columns))
+                if removed_columns := set(dataframe.columns) - set(
+                    non_nan_data.columns
+                ):
+                    print(f'Skipping columns with NaNs: {str(removed_columns)}')
                 dataframe = non_nan_data
-            if drop_nan_clumns_or_rows == 'rows':
+            elif drop_nan_clumns_or_rows == 'rows':
                 non_nan_data = dataframe.dropna(axis='index')
-                number_of_removed_rows = len(dataframe) - len(non_nan_data)
-                if number_of_removed_rows:
+                if number_of_removed_rows := len(dataframe) - len(
+                    non_nan_data
+                ):
                     print(f'Skipped {number_of_removed_rows} rows with NaNs.')
                 dataframe = non_nan_data
             numerical_data = dataframe.select_dtypes(include='number')
@@ -70,6 +74,7 @@ def train_pytorch_model_from_csv(
 
         def __getitem__(self, index):
             return [self.features.loc[index].to_numpy(dtype='float32'), self.labels.loc[index].to_numpy(dtype='float32')]
+
 
     dataset = CsvDataset(
         file_path=training_data_path,

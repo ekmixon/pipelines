@@ -64,7 +64,7 @@ class PipelineServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.create_pipeline_with_http_info(body, **kwargs)  # noqa: E501
 
-    def create_pipeline_with_http_info(self, body, **kwargs):  # noqa: E501
+    def create_pipeline_with_http_info(self, body, **kwargs):    # noqa: E501
         """Creates a pipeline.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -97,16 +97,12 @@ class PipelineServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'body'
+            'body',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -127,17 +123,13 @@ class PipelineServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
-        body_params = None
-        if 'body' in local_var_params:
-            body_params = local_var_params['body']
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        body_params = local_var_params.get('body')
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # HTTP header `Content-Type`
         header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
@@ -190,7 +182,7 @@ class PipelineServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.create_pipeline_version_with_http_info(body, **kwargs)  # noqa: E501
 
-    def create_pipeline_version_with_http_info(self, body, **kwargs):  # noqa: E501
+    def create_pipeline_version_with_http_info(self, body, **kwargs):    # noqa: E501
         """Adds a pipeline version to the specified pipeline.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -223,16 +215,12 @@ class PipelineServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'body'
+            'body',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -253,17 +241,13 @@ class PipelineServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
-        body_params = None
-        if 'body' in local_var_params:
-            body_params = local_var_params['body']
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        body_params = local_var_params.get('body')
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # HTTP header `Content-Type`
         header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
@@ -316,7 +300,7 @@ class PipelineServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.delete_pipeline_with_http_info(id, **kwargs)  # noqa: E501
 
-    def delete_pipeline_with_http_info(self, id, **kwargs):  # noqa: E501
+    def delete_pipeline_with_http_info(self, id, **kwargs):    # noqa: E501
         """Deletes a pipeline and its pipeline versions.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -349,16 +333,12 @@ class PipelineServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'id'
+            'id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -381,15 +361,13 @@ class PipelineServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -438,7 +416,7 @@ class PipelineServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.delete_pipeline_version_with_http_info(version_id, **kwargs)  # noqa: E501
 
-    def delete_pipeline_version_with_http_info(self, version_id, **kwargs):  # noqa: E501
+    def delete_pipeline_version_with_http_info(self, version_id, **kwargs):    # noqa: E501
         """Deletes a pipeline version by pipeline version ID. If the deleted pipeline version is the default pipeline version, the pipeline's default version changes to the pipeline's most recent pipeline version. If there are no remaining pipeline versions, the pipeline will have no default version. Examines the run_service_api.ipynb notebook to learn more about creating a run using a pipeline version (https://github.com/kubeflow/pipelines/blob/master/tools/benchmarks/run_service_api.ipynb).  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -471,16 +449,12 @@ class PipelineServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'version_id'
+            'version_id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -503,15 +477,13 @@ class PipelineServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -560,7 +532,7 @@ class PipelineServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.get_pipeline_with_http_info(id, **kwargs)  # noqa: E501
 
-    def get_pipeline_with_http_info(self, id, **kwargs):  # noqa: E501
+    def get_pipeline_with_http_info(self, id, **kwargs):    # noqa: E501
         """Finds a specific pipeline by ID.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -593,16 +565,12 @@ class PipelineServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'id'
+            'id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -625,15 +593,13 @@ class PipelineServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -682,7 +648,7 @@ class PipelineServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.get_pipeline_version_with_http_info(version_id, **kwargs)  # noqa: E501
 
-    def get_pipeline_version_with_http_info(self, version_id, **kwargs):  # noqa: E501
+    def get_pipeline_version_with_http_info(self, version_id, **kwargs):    # noqa: E501
         """Gets a pipeline version by pipeline version ID.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -715,16 +681,12 @@ class PipelineServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'version_id'
+            'version_id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -747,15 +709,13 @@ class PipelineServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -804,7 +764,7 @@ class PipelineServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.get_pipeline_version_template_with_http_info(version_id, **kwargs)  # noqa: E501
 
-    def get_pipeline_version_template_with_http_info(self, version_id, **kwargs):  # noqa: E501
+    def get_pipeline_version_template_with_http_info(self, version_id, **kwargs):    # noqa: E501
         """Returns a YAML template that contains the specified pipeline version's description, parameters and metadata.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -837,16 +797,12 @@ class PipelineServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'version_id'
+            'version_id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -869,15 +825,13 @@ class PipelineServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -926,7 +880,7 @@ class PipelineServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.get_template_with_http_info(id, **kwargs)  # noqa: E501
 
-    def get_template_with_http_info(self, id, **kwargs):  # noqa: E501
+    def get_template_with_http_info(self, id, **kwargs):    # noqa: E501
         """Returns a single YAML template that contains the description, parameters, and metadata associated with the pipeline provided.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -959,16 +913,12 @@ class PipelineServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'id'
+            'id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -991,15 +941,13 @@ class PipelineServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -1058,7 +1006,7 @@ class PipelineServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.list_pipeline_versions_with_http_info(**kwargs)  # noqa: E501
 
-    def list_pipeline_versions_with_http_info(self, **kwargs):  # noqa: E501
+    def list_pipeline_versions_with_http_info(self, **kwargs):    # noqa: E501
         """Lists all pipeline versions of a given pipeline.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1106,16 +1054,12 @@ class PipelineServiceApi(object):
             'page_size',
             'page_token',
             'sort_by',
-            'filter'
+            'filter',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1144,15 +1088,13 @@ class PipelineServiceApi(object):
         if 'filter' in local_var_params and local_var_params['filter'] is not None:  # noqa: E501
             query_params.append(('filter', local_var_params['filter']))  # noqa: E501
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -1211,7 +1153,7 @@ class PipelineServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.list_pipelines_with_http_info(**kwargs)  # noqa: E501
 
-    def list_pipelines_with_http_info(self, **kwargs):  # noqa: E501
+    def list_pipelines_with_http_info(self, **kwargs):    # noqa: E501
         """Finds all pipelines.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1259,16 +1201,12 @@ class PipelineServiceApi(object):
             'sort_by',
             'filter',
             'resource_reference_key_type',
-            'resource_reference_key_id'
+            'resource_reference_key_id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1297,15 +1235,13 @@ class PipelineServiceApi(object):
         if 'resource_reference_key_id' in local_var_params and local_var_params['resource_reference_key_id'] is not None:  # noqa: E501
             query_params.append(('resource_reference_key.id', local_var_params['resource_reference_key_id']))  # noqa: E501
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501

@@ -47,11 +47,7 @@ parser = pl.Trainer.add_argparse_args(parent_parser=parser)
 
 args = vars(parser.parse_args())
 
-if not args["max_epochs"]:
-    max_epochs = 5
-else:
-    max_epochs = args["max_epochs"]
-
+max_epochs = args["max_epochs"] or 5
 args["max_epochs"] = max_epochs
 
 trainer_args = {}

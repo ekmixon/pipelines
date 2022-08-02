@@ -8,5 +8,4 @@ def run(data):
         # You can return any data type, as long as it is JSON serializable.
         return 'AML Model inference result, the data is {0}'.format(data)
     except Exception as e:
-        error = str(e)
-        return error
+        return str(e)

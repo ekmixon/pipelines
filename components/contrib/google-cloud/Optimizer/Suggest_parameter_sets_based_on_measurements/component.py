@@ -140,7 +140,7 @@ def suggest_parameter_sets_from_measurements_using_gcp_ai_platform_optimizer(
             trial_name = create_trial_response["name"]
             logging.info(f'Added trial "{trial_name}" to the study.')
 
-        logging.info(f'Requesting suggestions.')
+        logging.info('Requesting suggestions.')
         suggest_trials_request = trials_api.suggest(
             parent=fix_resource_name(study_name),
             body=dict(
@@ -157,7 +157,7 @@ def suggest_parameter_sets_from_measurements_using_gcp_ai_platform_optimizer(
             # Knowledge: The "done" key is just missing until the result is available
             if get_operation_response.get('done'):
                 break
-            logging.info('Operation not finished yet: ' + str(get_operation_response))
+            logging.info(f'Operation not finished yet: {str(get_operation_response)}')
             time.sleep(10)
         operation_response = get_operation_response['response']
         suggested_trials = operation_response['trials']

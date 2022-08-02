@@ -21,23 +21,23 @@ def parse_input_args(input_str: str):
     """
     output_dict = {}
     if not input_str:
-        raise ValueError("Empty input string: {}".format(input_str))
+        raise ValueError(f"Empty input string: {input_str}")
 
     key_pairs: list = input_str.split(",")
 
     key_pairs = [x.strip() for x in key_pairs]
 
     if not key_pairs:
-        raise ValueError("Incorrect format: {}".format(input_str))
+        raise ValueError(f"Incorrect format: {input_str}")
 
     for each_key in key_pairs:
         try:
             key, value = each_key.split("=")
         except ValueError as value_error:
-            raise ValueError("Expected input format "
-                             "'key1=value1, key2=value2' "
-                             "but received {}".format(input_str)) \
-                from value_error
+            raise ValueError(
+                f"Expected input format 'key1=value1, key2=value2' but received {input_str}"
+            ) from value_error
+
         if value.isdigit():
             value = int(value)
         output_dict[key] = value

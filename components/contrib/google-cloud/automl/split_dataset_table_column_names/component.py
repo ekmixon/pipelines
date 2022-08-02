@@ -27,13 +27,13 @@ def automl_split_dataset_table_column_names(
     from google.cloud import automl
     client = automl.AutoMlClient()
     list_table_specs_response = client.list_table_specs(dataset_path)
-    table_specs = [s for s in list_table_specs_response]
+    table_specs = list(list_table_specs_response)
     print('table_specs=')
     print(table_specs)
     table_spec_name = table_specs[table_index].name
 
     list_column_specs_response = client.list_column_specs(table_spec_name)
-    column_specs = [s for s in list_column_specs_response]
+    column_specs = list(list_column_specs_response)
     print('column_specs=')
     print(column_specs)
 

@@ -38,9 +38,12 @@ def connect_to_mlmd() -> metadata_store.MetadataStore:
         'METADATA_GRPC_SERVICE_SERVICE_PORT', 8080))
 
     mlmd_connection_config = metadata_store_pb2.MetadataStoreClientConfig(
-        host="[{}]".format(metadata_service_host) if isIPv6(metadata_service_host) else metadata_service_host,
+        host=f"[{metadata_service_host}]"
+        if isIPv6(metadata_service_host)
+        else metadata_service_host,
         port=metadata_service_port,
     )
+
 
     # Checking the connection to the Metadata store.
     for _ in range(100):
@@ -55,7 +58,11 @@ def connect_to_mlmd() -> metadata_store.MetadataStore:
             )
             return mlmd_store
         except Exception as e:
-            print('Failed to access the Metadata store. Exception: "{}"'.format(str(e)), file=sys.stderr)
+            print(
+                f'Failed to access the Metadata store. Exception: "{str(e)}"',
+                file=sys.stderr,
+            )
+
             sys.stderr.flush()
             sleep(1)
 
@@ -177,8 +184,8 @@ def get_context_by_name(
 ) -> metadata_store_pb2.Context:
     matching_contexts = [context for context in store.get_contexts() if context.name == context_name]
     assert len(matching_contexts) <= 1
-    if len(matching_contexts) == 0:
-        raise ValueError('Context with name "{}" was not found'.format(context_name))
+    if not matching_contexts:
+        raise ValueError(f'Context with name "{context_name}" was not found')
     return matching_contexts[0]
 
 
@@ -207,7 +214,10 @@ def get_or_create_context_with_type(
     context_types = store.get_context_types_by_id([context.type_id])
     assert len(context_types) == 1
     if context_types[0].name != type_name:
-        raise RuntimeError('Context "{}" was found, but it has type "{}" instead of "{}"'.format(context_name, context_types[0].name, type_name))
+        raise RuntimeError(
+            f'Context "{context_name}" was found, but it has type "{context_types[0].name}" instead of "{type_name}"'
+        )
+
     return context
 
 
@@ -258,7 +268,7 @@ def get_or_create_run_context(
     store,
     run_id: str,
 ) -> metadata_store_pb2.Context:
-    context = get_or_create_context_with_type(
+    return get_or_create_context_with_type(
         store=store,
         context_name=run_id,
         type_name=RUN_CONTEXT_TYPE_NAME,
@@ -267,11 +277,14 @@ def get_or_create_run_context(
             CONTEXT_RUN_ID_PROPERTY_NAME: metadata_store_pb2.STRING,
         },
         properties={
-            CONTEXT_PIPELINE_NAME_PROPERTY_NAME: metadata_store_pb2.Value(string_value=run_id),
-            CONTEXT_RUN_ID_PROPERTY_NAME: metadata_store_pb2.Value(string_value=run_id),
+            CONTEXT_PIPELINE_NAME_PROPERTY_NAME: metadata_store_pb2.Value(
+                string_value=run_id
+            ),
+            CONTEXT_RUN_ID_PROPERTY_NAME: metadata_store_pb2.Value(
+                string_value=run_id
+            ),
         },
     )
-    return context
 
 
 def create_new_execution_in_existing_run_context(
@@ -285,12 +298,14 @@ def create_new_execution_in_existing_run_context(
     instance_id: str = None,
     custom_properties = None,
 ) -> metadata_store_pb2.Execution:
-    pipeline_name = pipeline_name or 'Context_' + str(context_id) + '_pipeline'
-    run_id = run_id or 'Context_' + str(context_id) + '_run'
+    pipeline_name = pipeline_name or f'Context_{context_id}_pipeline'
+    run_id = run_id or f'Context_{context_id}_run'
     instance_id = instance_id or execution_type_name
-    mlmd_custom_properties = {}
-    for property_name, property_value in (custom_properties or {}).items():
-        mlmd_custom_properties[property_name] = value_to_mlmd_value(property_value)
+    mlmd_custom_properties = {
+        property_name: value_to_mlmd_value(property_value)
+        for property_name, property_value in (custom_properties or {}).items()
+    }
+
     mlmd_custom_properties[KFP_POD_NAME_EXECUTION_PROPERTY_NAME] = metadata_store_pb2.Value(string_value=pod_name)
     return create_new_execution_in_existing_context(
         store=store,
@@ -358,10 +373,14 @@ def link_execution_to_input_artifact(
 ) -> metadata_store_pb2.Artifact:
     artifacts = store.get_artifacts_by_uri(uri)
     if len(artifacts) == 0:
-        print('Error: Not found upstream artifact with URI={}.'.format(uri), file=sys.stderr)
+        print(f'Error: Not found upstream artifact with URI={uri}.', file=sys.stderr)
         return None
     if len(artifacts) > 1:
-        print('Error: Found multiple artifacts with the same URI. {} Using the last one..'.format(artifacts), file=sys.stderr)
+        print(
+            f'Error: Found multiple artifacts with the same URI. {artifacts} Using the last one..',
+            file=sys.stderr,
+        )
+
 
     artifact = artifacts[-1]
 
@@ -395,8 +414,14 @@ def create_new_output_artifact(
         ARTIFACT_IO_NAME_PROPERTY_NAME: metadata_store_pb2.Value(string_value=output_name),
     }
     if run_id:
-        custom_properties[ARTIFACT_PIPELINE_NAME_PROPERTY_NAME] = metadata_store_pb2.Value(string_value=str(run_id))
-        custom_properties[ARTIFACT_RUN_ID_PROPERTY_NAME] = metadata_store_pb2.Value(string_value=str(run_id))
+        custom_properties[
+            ARTIFACT_PIPELINE_NAME_PROPERTY_NAME
+        ] = metadata_store_pb2.Value(string_value=run_id)
+
+        custom_properties[
+            ARTIFACT_RUN_ID_PROPERTY_NAME
+        ] = metadata_store_pb2.Value(string_value=run_id)
+
     if argo_artifact:
         custom_properties[ARTIFACT_ARGO_ARTIFACT_PROPERTY_NAME] = metadata_store_pb2.Value(string_value=json.dumps(argo_artifact, sort_keys=True))
     return create_new_artifact_event_and_attribution(
@@ -420,9 +445,9 @@ def create_new_output_artifact(
 
 def isIPv6(ip: str) -> bool: 
     try: 
-        return False if type(ip_address(ip)) is IPv4Address else True
+        return type(ip_address(ip)) is not IPv4Address
     except Exception as e: 
-        print('Error: Exception:{}'.format(str(e)), file=sys.stderr)
+        print(f'Error: Exception:{str(e)}', file=sys.stderr)
         sys.stderr.flush()
 
 

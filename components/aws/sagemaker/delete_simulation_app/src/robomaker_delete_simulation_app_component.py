@@ -78,10 +78,10 @@ class RoboMakerDeleteSimulationAppComponent(SageMakerComponent):
         outputs: RoboMakerDeleteSimulationAppOutputs,
     ):
         outputs.arn = self._arn
-        logging.info("Simulation Application {} has been deleted".format(outputs.arn))
+        logging.info(f"Simulation Application {outputs.arn} has been deleted")
 
     def _on_job_terminated(self):
-        logging.info("Simulation Application {} failed to delete".format(self._arn))
+        logging.info(f"Simulation Application {self._arn} failed to delete")
 
     def _create_job_request(
         self,

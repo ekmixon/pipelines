@@ -33,12 +33,7 @@ class TestJobMode(unittest.TestCase):
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # model = kfp_server_api.models.job_mode.JobMode()  # noqa: E501
-        if include_optional :
-            return JobMode(
-            )
-        else :
-            return JobMode(
+        return JobMode(
         )
 
     def testJobMode(self):

@@ -95,10 +95,9 @@ class BaseComponent(metaclass=abc.ABCMeta):  # pylint: disable=R0903
             TypeError : If key value type does not match expected value type.
         """
         if not actual_value:
-            is_optional = cls._optional_check(
+            if is_optional := cls._optional_check(
                 actual_value=actual_value, key=key, spec_dict=spec_dict
-            )
-            if is_optional:
+            ):
                 return
 
         expected_type = spec_dict[key].type

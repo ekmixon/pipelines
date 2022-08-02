@@ -22,7 +22,7 @@ server = importlib.import_module("server")
 
 
 def wrap_error_in_html(error: Text) -> bytes:
-    html = "<html><title>{}</title><body>{}</body></html>".format(error, error)
+    html = f"<html><title>{error}</title><body>{error}</body></html>"
     return bytes(html, "utf-8")
 
 

@@ -109,9 +109,7 @@ class RoboMakerSimulationJobBatchComponent(SageMakerComponent):
     ):
         for sim_request_id in self._sim_request_ids:
             logging.info(
-                "Simulation Job in RoboMaker: https://{}.console.aws.amazon.com/robomaker/home?region={}#/simulationJobBatches/{}".format(
-                    inputs.region, inputs.region, sim_request_id
-                )
+                f"Simulation Job in RoboMaker: https://{inputs.region}.console.aws.amazon.com/robomaker/home?region={inputs.region}#/simulationJobBatches/{sim_request_id}"
             )
 
     def _on_job_terminated(self):
@@ -162,10 +160,9 @@ class RoboMakerSimulationJobBatchComponent(SageMakerComponent):
             f"Started Robomaker Simulation Job Batch with ID: {self._batch_job_id}"
         )
         logging.info(
-            "Simulation Job Batch in RoboMaker: https://{}.console.aws.amazon.com/robomaker/home?region={}#/simulationJobBatches/{}".format(
-                inputs.region, inputs.region, self._batch_job_id
-            )
+            f"Simulation Job Batch in RoboMaker: https://{inputs.region}.console.aws.amazon.com/robomaker/home?region={inputs.region}#/simulationJobBatches/{self._batch_job_id}"
         )
+
         self._sim_request_ids = set()
         for created_request in job["createdRequests"]:
             self._sim_request_ids.add(created_request["arn"].split("/")[-1])

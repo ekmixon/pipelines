@@ -33,12 +33,7 @@ class TestApiResourceType(unittest.TestCase):
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # model = kfp_server_api.models.api_resource_type.ApiResourceType()  # noqa: E501
-        if include_optional :
-            return ApiResourceType(
-            )
-        else :
-            return ApiResourceType(
+        return ApiResourceType(
         )
 
     def testApiResourceType(self):

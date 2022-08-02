@@ -169,7 +169,7 @@ def experiment_id(kfp_client, tmp_path_factory, worker_id):
     root_tmp_dir = tmp_path_factory.getbasetemp().parent
 
     fn = root_tmp_dir / "experiment_id"
-    with FileLock(str(fn) + ".lock"):
+    with FileLock(f"{str(fn)}.lock"):
         if fn.is_file():
             data = fn.read_text()
         else:

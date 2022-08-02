@@ -90,10 +90,7 @@ class DebugRulesStatus(Enum):
                 has_error = True
             if debug_rule["RuleEvaluationStatus"] == "InProgress":
                 return DebugRulesStatus.INPROGRESS
-        if has_error:
-            return DebugRulesStatus.ERRORED
-        else:
-            return DebugRulesStatus.COMPLETED
+        return DebugRulesStatus.ERRORED if has_error else DebugRulesStatus.COMPLETED
 
 
 class SageMakerComponent:
@@ -482,7 +479,7 @@ class SageMakerComponent:
                 license_file.readline(),
             )
             if version_match is not None:
-                component_version = version_match.group(1)
+                component_version = version_match[1]
 
         return component_version
 
@@ -537,17 +534,17 @@ class SageMakerComponent:
 
         try:
             logging.info(
-                "\n******************** CloudWatch logs for {} {} ********************\n".format(
-                    log_grp, job_name
-                )
+                f"\n******************** CloudWatch logs for {log_grp} {job_name} ********************\n"
             )
 
+
             log_streams = self._cw_client.describe_log_streams(
-                logGroupName=log_grp, logStreamNamePrefix=job_name + "/"
+                logGroupName=log_grp, logStreamNamePrefix=f"{job_name}/"
             )["logStreams"]
 
+
             for log_stream in log_streams:
-                logging.info("\n***** {} *****\n".format(log_stream["logStreamName"]))
+                logging.info(f'\n***** {log_stream["logStreamName"]} *****\n')
                 response = self._cw_client.get_log_events(
                     logGroupName=log_grp, logStreamName=log_stream["logStreamName"]
                 )
@@ -555,10 +552,9 @@ class SageMakerComponent:
                     logging.info(event["message"])
 
             logging.info(
-                "\n******************** End of CloudWatch logs for {} {} ********************\n".format(
-                    log_grp, job_name
-                )
+                f"\n******************** End of CloudWatch logs for {log_grp} {job_name} ********************\n"
             )
+
         except Exception as e:
             logging.error(CW_ERROR_MESSAGE)
             logging.error(e)
@@ -573,8 +569,7 @@ class SageMakerComponent:
             str: The S3 model artifacts of the job.
         """
         info = self._sm_client.describe_training_job(TrainingJobName=job_name)
-        model_artifact_url = info["ModelArtifacts"]["S3ModelArtifacts"]
-        return model_artifact_url
+        return info["ModelArtifacts"]["S3ModelArtifacts"]
 
     def _get_image_from_job(self, job_name: str):
         """Gets the training image URL from a training job.
@@ -587,11 +582,8 @@ class SageMakerComponent:
         """
         info = self._sm_client.describe_training_job(TrainingJobName=job_name)
         if "TrainingImage" in info["AlgorithmSpecification"]:
-            image = info["AlgorithmSpecification"]["TrainingImage"]
-        else:
-            algorithm_name = info["AlgorithmSpecification"]["AlgorithmName"]
-            image = self._sm_client.describe_algorithm(AlgorithmName=algorithm_name)[
-                "TrainingSpecification"
-            ]["TrainingImage"]
-
-        return image
+            return info["AlgorithmSpecification"]["TrainingImage"]
+        algorithm_name = info["AlgorithmSpecification"]["AlgorithmName"]
+        return self._sm_client.describe_algorithm(AlgorithmName=algorithm_name)[
+            "TrainingSpecification"
+        ]["TrainingImage"]

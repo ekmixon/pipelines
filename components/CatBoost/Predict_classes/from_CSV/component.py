@@ -31,7 +31,7 @@ def catboost_predict_classes(
         column_description_path = tempfile.NamedTemporaryFile(delete=False).name
         with open(column_description_path, 'w') as column_description_file:
             for idx, kind in column_descriptions.items():
-                column_description_file.write('{}\t{}\n'.format(idx, kind))
+                column_description_file.write(f'{idx}\t{kind}\n')
     else:
         column_description_path = None
 

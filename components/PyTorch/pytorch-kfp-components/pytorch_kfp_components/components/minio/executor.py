@@ -24,7 +24,7 @@ class Executor(BaseExecutor):
     def __init__(self):  #pylint: disable=useless-super-delegation
         super(Executor, self).__init__()  #pylint: disable=super-with-arguments
 
-    def _initiate_minio_client(self, minio_config: dict):  #pylint: disable=no-self-use
+    def _initiate_minio_client(self, minio_config: dict):    #pylint: disable=no-self-use
         """Initializes the minio client.
 
         Args:
@@ -35,15 +35,14 @@ class Executor(BaseExecutor):
         minio_host = minio_config["HOST"]
         access_key = minio_config["ACCESS_KEY"]
         secret_key = minio_config["SECRET_KEY"]
-        client = Minio(
+        return Minio(
             minio_host,
             access_key=access_key,
             secret_key=secret_key,
             secure=False,
         )
-        return client
 
-    def _read_minio_creds(self, endpoint: str):  #pylint: disable=no-self-use
+    def _read_minio_creds(self, endpoint: str):    #pylint: disable=no-self-use
         """Reads the minio credentials.
 
         Args:
@@ -59,13 +58,11 @@ class Executor(BaseExecutor):
         if "MINIO_SECRET_KEY" not in os.environ:
             raise ValueError("Environment variable MINIO_SECRET_KEY not found")
 
-        minio_config = {
+        return {
             "HOST": endpoint,
             "ACCESS_KEY": os.environ["MINIO_ACCESS_KEY"],
             "SECRET_KEY": os.environ["MINIO_SECRET_KEY"],
         }
-
-        return minio_config
 
     def upload_artifacts_to_minio(  #pylint: disable=no-self-use,too-many-arguments
         self,
@@ -108,7 +105,7 @@ class Executor(BaseExecutor):
                 urllib3.exceptions.ConnectionError,
                 RuntimeError,
         ) as expection_raised:
-            print(str(expection_raised))
+            print(expection_raised)
             raise Exception(expection_raised)  #pylint: disable=raise-missing-from
 
         return output_dict
@@ -136,7 +133,7 @@ class Executor(BaseExecutor):
         endpoint = exec_properties.get(standard_component_specs.MINIO_ENDPOINT)
         return source, bucket_name, folder_name, endpoint
 
-    def Do(self, input_dict: dict, output_dict: dict, exec_properties: dict):  #pylint: disable=too-many-locals
+    def Do(self, input_dict: dict, output_dict: dict, exec_properties: dict):    #pylint: disable=too-many-locals
         """Executes the minio upload process.
 
         Args:
@@ -158,7 +155,7 @@ class Executor(BaseExecutor):
         client = self._initiate_minio_client(minio_config=minio_config)
 
         if not os.path.exists(source):
-            raise ValueError("Input path - {} does not exists".format(source))
+            raise ValueError(f"Input path - {source} does not exists")
 
         if os.path.isfile(source):
             artifact_name = source.split("/")[-1]
@@ -184,4 +181,4 @@ class Executor(BaseExecutor):
                         output_dict=output_dict,
                     )
         else:
-            raise ValueError("Unknown source: {} ".format(source))
+            raise ValueError(f"Unknown source: {source} ")

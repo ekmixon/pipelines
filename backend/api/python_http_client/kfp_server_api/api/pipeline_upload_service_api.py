@@ -68,7 +68,7 @@ class PipelineUploadServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.upload_pipeline_with_http_info(uploadfile, **kwargs)  # noqa: E501
 
-    def upload_pipeline_with_http_info(self, uploadfile, **kwargs):  # noqa: E501
+    def upload_pipeline_with_http_info(self, uploadfile, **kwargs):    # noqa: E501
         """upload_pipeline  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -107,16 +107,12 @@ class PipelineUploadServiceApi(object):
         all_params = [
             'uploadfile',
             'name',
-            'description'
+            'description',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -141,17 +137,15 @@ class PipelineUploadServiceApi(object):
         if 'description' in local_var_params and local_var_params['description'] is not None:  # noqa: E501
             query_params.append(('description', local_var_params['description']))  # noqa: E501
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
         if 'uploadfile' in local_var_params:
             local_var_files['uploadfile'] = local_var_params['uploadfile']  # noqa: E501
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # HTTP header `Content-Type`
         header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
@@ -210,7 +204,7 @@ class PipelineUploadServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.upload_pipeline_version_with_http_info(uploadfile, **kwargs)  # noqa: E501
 
-    def upload_pipeline_version_with_http_info(self, uploadfile, **kwargs):  # noqa: E501
+    def upload_pipeline_version_with_http_info(self, uploadfile, **kwargs):    # noqa: E501
         """upload_pipeline_version  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -252,16 +246,12 @@ class PipelineUploadServiceApi(object):
             'uploadfile',
             'name',
             'pipelineid',
-            'description'
+            'description',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -288,17 +278,15 @@ class PipelineUploadServiceApi(object):
         if 'description' in local_var_params and local_var_params['description'] is not None:  # noqa: E501
             query_params.append(('description', local_var_params['description']))  # noqa: E501
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
         if 'uploadfile' in local_var_params:
             local_var_files['uploadfile'] = local_var_params['uploadfile']  # noqa: E501
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # HTTP header `Content-Type`
         header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501

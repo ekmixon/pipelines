@@ -37,7 +37,7 @@ def test_workteamjob(
     kfp_client, experiment_id, region, sagemaker_client, test_file_dir
 ):
 
-    download_dir = utils.mkdir(os.path.join(test_file_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{test_file_dir}/generated"))
 
     test_params = utils.load_params(
         utils.replace_placeholders(
@@ -48,8 +48,10 @@ def test_workteamjob(
 
     # Generate random prefix for workteam_name to avoid errors if resources with same name exists
     test_params["Arguments"]["team_name"] = workteam_name = (
-        utils.generate_random_string(5) + "-" + test_params["Arguments"]["team_name"]
+        f"{utils.generate_random_string(5)}-"
+        + test_params["Arguments"]["team_name"]
     )
+
 
     try:
         workflow_json = create_workteamjob(

@@ -73,7 +73,7 @@ if not args.output_model_path.startswith('gs://'):
         os.makedirs(save_dir)
 
 model.save(args.output_model_path)
-print('Saved trained model at %s ' % args.output_model_path)
+print(f'Saved trained model at {args.output_model_path} ')
 
 Path(args.output_model_path_file).parent.mkdir(parents=True, exist_ok=True)
 Path(args.output_model_path_file).write_text(args.output_model_path)

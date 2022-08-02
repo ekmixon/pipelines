@@ -51,7 +51,7 @@ class Executor(BaseExecutor):
         )
         return mar_config, mar_save_path
 
-    def _validate_mar_config(self, mar_config):  #pylint: disable=R0201
+    def _validate_mar_config(self, mar_config):    #pylint: disable=R0201
         """Validates the mar configuration properties.
 
         Args:
@@ -75,18 +75,14 @@ class Executor(BaseExecutor):
                 f"Mandatory arguments are {mandatory_args}"
             )
 
-        missing_list = []
-        for key in mandatory_args:
-            if key not in mar_config:
-                missing_list.append(key)
-
-        if missing_list:
+        if missing_list := [
+            key for key in mandatory_args if key not in mar_config
+        ]:
             raise ValueError(
-                "Following Mandatory keys are missing in the config file {}".
-                format(missing_list)
+                f"Following Mandatory keys are missing in the config file {missing_list}"
             )
 
-    def download_config_properties(self, url):  #pylint: disable=R0201
+    def download_config_properties(self, url):    #pylint: disable=R0201
         """Downloads the config.properties.
 
         Args:
@@ -97,9 +93,9 @@ class Executor(BaseExecutor):
                 url = wget.download(url, tempfile.mkdtemp())
             except ValueError as exc:
                 raise ValueError(
-                    "Unable to download config "
-                    "properties file using url - {}".format(url)
+                    f"Unable to download config properties file using url - {url}"
                 ) from exc
+
 
         return url
 
@@ -177,8 +173,9 @@ class Executor(BaseExecutor):
 
         if "EXPORT_PATH" not in mar_config:
             mar_file_local_path = os.path.join(
-                os.getcwd(), "{}.mar".format(mar_config["MODEL_NAME"])
+                os.getcwd(), f'{mar_config["MODEL_NAME"]}.mar'
             )
+
             if not Path(mar_save_path).exists():
                 Path(mar_save_path).mkdir(parents=True, exist_ok=True)
             shutil.move(mar_file_local_path, mar_save_path)
@@ -187,9 +184,9 @@ class Executor(BaseExecutor):
 
         elif mar_config["EXPORT_PATH"] != mar_save_path:
             raise Exception(
-                "The export path [{}] needs to be same as mar save path [{}] ".
-                format(mar_config["EXPORT_PATH"], mar_save_path)
+                f'The export path [{mar_config["EXPORT_PATH"]}] needs to be same as mar save path [{mar_save_path}] '
             )
+
 
         print("Saving model file ")
         ## TODO: While separating the mar generation component from trainer # pylint: disable=W0511

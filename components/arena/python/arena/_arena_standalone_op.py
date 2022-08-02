@@ -43,25 +43,15 @@ def standalone_job_op(name, image, command, gpus=0, cpu_limit='0', memory_limit=
 
     options = []
     if sync_source:
-       options.append('--sync-source')
-       options.append(str(sync_source))
-
+        options.extend(('--sync-source', str(sync_source)))
     for e in env:
-      options.append('--env')
-      options.append(str(e))
-
+        options.extend(('--env', str(e)))
     for d in data:
-      options.append('--data')
-      options.append(str(d))
-
+        options.extend(('--data', str(d)))
     for m in metrics:
-      options.append('--metric')
-      options.append(str(m))
-
+        options.extend(('--metric', str(m)))
     if tensorboard_image:
-      options.append('--tensorboard-image')
-      options.append(str(tensorboard_image))
-
+        options.extend(('--tensorboard-image', str(tensorboard_image)))
     op = dsl.ContainerOp(
           name=name,
           image=arena_image,

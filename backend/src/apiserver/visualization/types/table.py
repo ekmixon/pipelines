@@ -36,13 +36,10 @@ files = file_io.get_matching_files(source)
 # Read data from file and write it to a DataFrame object.
 if not variables.get("headers", False):
     # If no headers are provided, use the first row as headers
-    for f in files:
-        dfs.append(pd.read_csv(f))
+    dfs.extend(pd.read_csv(f) for f in files)
 else:
     # If headers are provided, do not set headers for DataFrames
-    for f in files:
-        dfs.append(pd.read_csv(f, header=None))
-
+    dfs.extend(pd.read_csv(f, header=None) for f in files)
 # Display DataFrame as output.
 df = pd.concat(dfs)
 if variables.get("headers", False):

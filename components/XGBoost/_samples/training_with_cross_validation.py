@@ -13,10 +13,11 @@ def cross_validation_pipeline(
     num_iterations: int = 200,
 ):
     data = chicago_taxi_dataset_op(
-        where='trip_start_timestamp >= "{}" AND trip_start_timestamp < "{}"'.format('2019-01-01', '2019-02-01'),
+        where='trip_start_timestamp >= "2019-01-01" AND trip_start_timestamp < "2019-02-01"',
         select='tips,trip_seconds,trip_miles,pickup_community_area,dropoff_community_area,fare,tolls,extras,trip_total',
         limit=10000,
     ).output
+
 
     xgboost_train_and_cv_regression_on_csv_op(
         data=data,

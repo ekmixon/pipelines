@@ -70,9 +70,7 @@ class ComponentCompileTest(unittest.TestCase):  #pylint: disable=too-many-instan
         self.tensorboard_image = "public.ecr.aws/pytorch-samples/tboard:latest"
         self.deploy_name_cifar = "torchserve"
         self.model_name = "cifar10"
-        self.isvc_name = (
-            self.deploy_name_cifar + "." + self.namespace + "." + "example.com"
-        )
+        self.isvc_name = f"{self.deploy_name_cifar}.{self.namespace}.example.com"
         self.cookie = ""
         self.ingress_gateway = (
             "http://istio-ingressgateway.istio-system.svc.cluster.local"
@@ -449,23 +447,11 @@ class ComponentCompileTest(unittest.TestCase):  #pylint: disable=too-many-instan
         """Test Cifar10 yamls compile."""
 
         @dsl.pipeline(
-            name="Training Cifar10 pipeline",
-            description="Cifar 10 dataset pipeline",
-        )  #pylint: disable=too-many-arguments,too-many-locals
-        def pytorch_cifar10(
-            minio_endpoint=self.minio_endpoint,
-            log_bucket=self.log_bucket,
-            log_dir=f"tensorboard/logs/{dsl.RUN_ID_PLACEHOLDER}",
-            mar_path=f"mar/{dsl.RUN_ID_PLACEHOLDER}/model-store",
-            config_prop_path=f"mar/{dsl.RUN_ID_PLACEHOLDER}/config",
-            model_uri=f"s3://mlpipeline/mar/{dsl.RUN_ID_PLACEHOLDER}",
-            tf_image=self.tensorboard_image,
-            deploy=self.deploy_name_cifar,
-            namespace=self.namespace,
-            confusion_matrix_log_dir=f"confusion_matrix"
-            f"/{dsl.RUN_ID_PLACEHOLDER}/",  #pylint: disable=f-string-without-interpolation
-            checkpoint_dir=f"checkpoint_dir/cifar10",
-        ):
+                name="Training Cifar10 pipeline",
+                description="Cifar 10 dataset pipeline",
+            )  #pylint: disable=too-many-arguments,too-many-locals
+        def pytorch_cifar10(minio_endpoint=self.minio_endpoint, log_bucket=self.log_bucket, log_dir=f"tensorboard/logs/{dsl.RUN_ID_PLACEHOLDER}", mar_path=f"mar/{dsl.RUN_ID_PLACEHOLDER}/model-store", config_prop_path=f"mar/{dsl.RUN_ID_PLACEHOLDER}/config", model_uri=f"s3://mlpipeline/mar/{dsl.RUN_ID_PLACEHOLDER}", tf_image=self.tensorboard_image, deploy=self.deploy_name_cifar, namespace=self.namespace, confusion_matrix_log_dir=f"confusion_matrix"
+                f"/{dsl.RUN_ID_PLACEHOLDER}/", checkpoint_dir="checkpoint_dir/cifar10"):
             """Cifar10 pipelines."""
             pod_template_spec = json.dumps({
                 "spec": {
@@ -521,14 +507,14 @@ class ComponentCompileTest(unittest.TestCase):  #pylint: disable=too-many-instan
                 set_display_name("Preprocess & Transform")
             )
             confusion_matrix_url = \
-                f"minio://{log_bucket}/{confusion_matrix_log_dir}"
+                    f"minio://{log_bucket}/{confusion_matrix_log_dir}"
             script_args = f"model_name=resnet.pth," \
-                          f"confusion_matrix_url={confusion_matrix_url}"
+                              f"confusion_matrix_url={confusion_matrix_url}"
             # For gpus, set number of gpus and accelerator type
             ptl_args = "max_epochs=1, " \
-                       "gpus=0, " \
-                       "accelerator=None, " \
-                       "profiler=pytorch"
+                           "gpus=0, " \
+                           "accelerator=None, " \
+                           "profiler=pytorch"
             component_cifar10_train = ""
             train_task = (
                 component_cifar10_train(

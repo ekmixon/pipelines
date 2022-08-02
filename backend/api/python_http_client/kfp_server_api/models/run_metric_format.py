@@ -88,14 +88,16 @@ class RunMetricFormat(object):
 
     def __eq__(self, other):
         """Returns true if both objects are equal"""
-        if not isinstance(other, RunMetricFormat):
-            return False
-
-        return self.to_dict() == other.to_dict()
+        return (
+            self.to_dict() == other.to_dict()
+            if isinstance(other, RunMetricFormat)
+            else False
+        )
 
     def __ne__(self, other):
         """Returns true if both objects are not equal"""
-        if not isinstance(other, RunMetricFormat):
-            return True
-
-        return self.to_dict() != other.to_dict()
+        return (
+            self.to_dict() != other.to_dict()
+            if isinstance(other, RunMetricFormat)
+            else True
+        )

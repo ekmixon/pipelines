@@ -30,7 +30,7 @@ class Executor(GenericExecutor):
     def __init__(self):  # pylint:disable=useless-super-delegation
         super().__init__()
 
-    def Do(self, input_dict: dict, output_dict: dict, exec_properties: dict):  #pylint: disable=too-many-locals
+    def Do(self, input_dict: dict, output_dict: dict, exec_properties: dict):    #pylint: disable=too-many-locals
         """This function of the Executor invokes the PyTorch Lightning training
         loop.
 
@@ -80,42 +80,39 @@ class Executor(GenericExecutor):
                 "Data module class is mandatory. "
                 "User defined training module is yet to be supported."
             )
-        if data_module_class:
-            data_module = data_module_class(
-                **data_module_args if data_module_args else {}
-            )
-            data_module.prepare_data()
-            data_module.setup(stage="fit")
-            model = model_class(**module_file_args if module_file_args else {})
+        data_module = data_module_class(**data_module_args or {})
+        data_module.prepare_data()
+        data_module.setup(stage="fit")
+        model = model_class(**module_file_args or {})
 
-            if (not module_file_args) and (not trainer_args):
-                raise ValueError("Module file & trainer args can't be empty")
+        if (not module_file_args) and (not trainer_args):
+            raise ValueError("Module file & trainer args can't be empty")
 
-            if not isinstance(trainer_args, dict):
-                raise TypeError("trainer_args must be a dict")
+        if not isinstance(trainer_args, dict):
+            raise TypeError("trainer_args must be a dict")
 
-            module_file_args.update(trainer_args)
-            parser = Namespace(**module_file_args)
-            trainer = pl.Trainer.from_argparse_args(parser)
+        module_file_args.update(trainer_args)
+        parser = Namespace(**module_file_args)
+        trainer = pl.Trainer.from_argparse_args(parser)
 
-            trainer.fit(model, data_module)  #pylint: disable=no-member
-            trainer.test(model)  #pylint: disable=no-member
+        trainer.fit(model, data_module)  #pylint: disable=no-member
+        trainer.test(model)  #pylint: disable=no-member
 
-            if "checkpoint_dir" in module_file_args:
-                model_save_path = module_file_args["checkpoint_dir"]
-            else:
-                model_save_path = "/tmp"
+        if "checkpoint_dir" in module_file_args:
+            model_save_path = module_file_args["checkpoint_dir"]
+        else:
+            model_save_path = "/tmp"
 
-            if "model_name" in module_file_args:
-                model_name = module_file_args["model_name"]
-            else:
-                model_name = "model_state_dict.pth"
+        if "model_name" in module_file_args:
+            model_name = module_file_args["model_name"]
+        else:
+            model_name = "model_state_dict.pth"
 
-            model_save_path = os.path.join(model_save_path, model_name)
-            if trainer.global_rank == 0:
-                print("Saving model to {}".format(model_save_path))
-                torch.save(model.state_dict(), model_save_path)
+        model_save_path = os.path.join(model_save_path, model_name)
+        if trainer.global_rank == 0:
+            print(f"Saving model to {model_save_path}")
+            torch.save(model.state_dict(), model_save_path)
 
-            output_dict[standard_component_specs.TRAINER_MODEL_SAVE_PATH
-                       ] = model_save_path
-            output_dict[standard_component_specs.PTL_TRAINER_OBJ] = trainer
+        output_dict[standard_component_specs.TRAINER_MODEL_SAVE_PATH
+                   ] = model_save_path
+        output_dict[standard_component_specs.PTL_TRAINER_OBJ] = trainer

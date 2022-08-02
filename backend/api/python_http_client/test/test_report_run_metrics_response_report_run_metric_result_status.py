@@ -33,12 +33,7 @@ class TestReportRunMetricsResponseReportRunMetricResultStatus(unittest.TestCase)
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # model = kfp_server_api.models.report_run_metrics_response_report_run_metric_result_status.ReportRunMetricsResponseReportRunMetricResultStatus()  # noqa: E501
-        if include_optional :
-            return ReportRunMetricsResponseReportRunMetricResultStatus(
-            )
-        else :
-            return ReportRunMetricsResponseReportRunMetricResultStatus(
+        return ReportRunMetricsResponseReportRunMetricResultStatus(
         )
 
     def testReportRunMetricsResponseReportRunMetricResultStatus(self):

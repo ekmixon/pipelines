@@ -100,17 +100,13 @@ class IrisDataModule(pl.LightningDataModule):
         )
 
     def train_dataloader(self):
-        train_loader = self.create_data_loader(dataset=self.train_set)
-        return train_loader
+        return self.create_data_loader(dataset=self.train_set)
 
     def val_dataloader(self):
-        validation_loader = self.create_data_loader(dataset=self.val_set)
-        return validation_loader
+        return self.create_data_loader(dataset=self.val_set)
 
     def test_dataloader(self):
-        test_loader = self.create_data_loader(dataset=self.test_set)
-        return test_loader
+        return self.create_data_loader(dataset=self.test_set)
 
 
-if __name__ == "__main__":
-    pass
+pass

@@ -60,11 +60,7 @@ class SageMakerDeployComponent(SageMakerComponent):
 
         name_suffix = SageMakerComponent._generate_unique_timestamped_id()
 
-        self._endpoint_name = (
-            spec.inputs.endpoint_name
-            if spec.inputs.endpoint_name
-            else f"Endpoint{name_suffix}"
-        )
+        self._endpoint_name = spec.inputs.endpoint_name or f"Endpoint{name_suffix}"
 
         self._should_update_existing = (
             spec.inputs.update_endpoint
@@ -133,30 +129,36 @@ class SageMakerDeployComponent(SageMakerComponent):
             request.pop("KmsKeyId")
 
         for i in range(len(request["ProductionVariants"]), 0, -1):
-            if inputs.__dict__["model_name_" + str(i)]:
-                request["ProductionVariants"][i - 1]["ModelName"] = inputs.__dict__[
-                    "model_name_" + str(i)
-                ]
-                if inputs.__dict__["variant_name_" + str(i)]:
+            if inputs.__dict__[f"model_name_{str(i)}"]:
+                request["ProductionVariants"][i - 1][
+                    "ModelName"
+                ] = inputs.__dict__[f"model_name_{str(i)}"]
+
+                if inputs.__dict__[f"variant_name_{str(i)}"]:
                     request["ProductionVariants"][i - 1][
                         "VariantName"
-                    ] = inputs.__dict__["variant_name_" + str(i)]
-                if inputs.__dict__["initial_instance_count_" + str(i)]:
+                    ] = inputs.__dict__[f"variant_name_{str(i)}"]
+
+                if inputs.__dict__[f"initial_instance_count_{str(i)}"]:
                     request["ProductionVariants"][i - 1][
                         "InitialInstanceCount"
-                    ] = inputs.__dict__["initial_instance_count_" + str(i)]
-                if inputs.__dict__["instance_type_" + str(i)]:
+                    ] = inputs.__dict__[f"initial_instance_count_{str(i)}"]
+
+                if inputs.__dict__[f"instance_type_{str(i)}"]:
                     request["ProductionVariants"][i - 1][
                         "InstanceType"
-                    ] = inputs.__dict__["instance_type_" + str(i)]
-                if inputs.__dict__["initial_variant_weight_" + str(i)]:
+                    ] = inputs.__dict__[f"instance_type_{str(i)}"]
+
+                if inputs.__dict__[f"initial_variant_weight_{str(i)}"]:
                     request["ProductionVariants"][i - 1][
                         "InitialVariantWeight"
-                    ] = inputs.__dict__["initial_variant_weight_" + str(i)]
-                if inputs.__dict__["accelerator_type_" + str(i)]:
+                    ] = inputs.__dict__[f"initial_variant_weight_{str(i)}"]
+
+                if inputs.__dict__[f"accelerator_type_{str(i)}"]:
                     request["ProductionVariants"][i - 1][
                         "AcceleratorType"
-                    ] = inputs.__dict__["accelerator_type_" + str(i)]
+                    ] = inputs.__dict__[f"accelerator_type_{str(i)}"]
+
                 else:
                     request["ProductionVariants"][i - 1].pop("AcceleratorType")
             else:
@@ -172,10 +174,11 @@ class SageMakerDeployComponent(SageMakerComponent):
         self, inputs: SageMakerDeployInputs, outputs: SageMakerDeployOutputs
     ):
         ### Documentation: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sagemaker.html#SageMaker.Client.create_endpoint
-        request = {}
+        request = {
+            "EndpointName": self._endpoint_name,
+            "EndpointConfigName": self._endpoint_config_name,
+        }
 
-        request["EndpointName"] = self._endpoint_name
-        request["EndpointConfigName"] = self._endpoint_config_name
 
         self._enable_tag_support(request, inputs)
 
@@ -187,13 +190,10 @@ class SageMakerDeployComponent(SageMakerComponent):
         Returns:
             An UpdateEndpoint request object.
         """
-        ### Documentation: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sagemaker.html#SageMaker.Client.update_endpoint
-        request = {}
-
-        request["EndpointName"] = self._endpoint_name
-        request["EndpointConfigName"] = self._endpoint_config_name
-
-        return request
+        return {
+            "EndpointName": self._endpoint_name,
+            "EndpointConfigName": self._endpoint_config_name,
+        }
 
     def _create_job_request(
         self, inputs: SageMakerDeployInputs, outputs: SageMakerDeployOutputs,
@@ -247,21 +247,17 @@ class SageMakerDeployComponent(SageMakerComponent):
     ):
         region = inputs.region
         logging.info(
-            "Endpoint configuration in SageMaker: https://{}.console.aws.amazon.com/sagemaker/home?region={}#/endpointConfig/{}".format(
-                region, region, request.config_request["EndpointConfigName"]
-            )
+            f'Endpoint configuration in SageMaker: https://{region}.console.aws.amazon.com/sagemaker/home?region={region}#/endpointConfig/{request.config_request["EndpointConfigName"]}'
         )
+
         logging.info(f"Endpoint Config Arn: {job.config_response['EndpointConfigArn']}")
         logging.info(f"Created endpoint with name: {self._endpoint_name}")
         logging.info(
-            "Endpoint in SageMaker: https://{}.console.aws.amazon.com/sagemaker/home?region={}#/endpoints/{}".format(
-                region, region, self._endpoint_name
-            )
+            f"Endpoint in SageMaker: https://{region}.console.aws.amazon.com/sagemaker/home?region={region}#/endpoints/{self._endpoint_name}"
         )
+
         logging.info(
-            "CloudWatch logs: https://{}.console.aws.amazon.com/cloudwatch/home?region={}#logStream:group=/aws/sagemaker/Endpoints/{};streamFilter=typeLogStreamPrefix".format(
-                region, region, self._endpoint_name
-            )
+            f"CloudWatch logs: https://{region}.console.aws.amazon.com/cloudwatch/home?region={region}#logStream:group=/aws/sagemaker/Endpoints/{self._endpoint_name};streamFilter=typeLogStreamPrefix"
         )
 
     def _endpoint_name_exists(self, endpoint_name: str):
@@ -277,7 +273,7 @@ class SageMakerDeployComponent(SageMakerComponent):
             endpoint_name = self._sm_client.describe_endpoint(
                 EndpointName=endpoint_name
             )["EndpointName"]
-            logging.info("Endpoint exists: " + endpoint_name)
+            logging.info(f"Endpoint exists: {endpoint_name}")
             return True
         except ClientError as e:
             logging.debug("Endpoint does not exist")
@@ -296,10 +292,10 @@ class SageMakerDeployComponent(SageMakerComponent):
             config_name = self._sm_client.describe_endpoint_config(
                 EndpointConfigName=endpoint_config_name
             )["EndpointConfigName"]
-            logging.info("Endpoint Config exists: " + config_name)
+            logging.info(f"Endpoint Config exists: {config_name}")
             return True
         except ClientError as e:
-            logging.info("Endpoint Config does not exist:" + endpoint_config_name)
+            logging.info(f"Endpoint Config does not exist:{endpoint_config_name}")
         return False
 
     def _get_endpoint_config(self, endpoint_name: str):
@@ -316,7 +312,7 @@ class SageMakerDeployComponent(SageMakerComponent):
             endpoint_config_name = self._sm_client.describe_endpoint(
                 EndpointName=endpoint_name
             )["EndpointConfigName"]
-            logging.info("Current Endpoint Config Name: " + endpoint_config_name)
+            logging.info(f"Current Endpoint Config Name: {endpoint_config_name}")
         except ClientError as e:
             logging.info("Endpoint Config does not exist")
             ## This is not an error, end point may not exist

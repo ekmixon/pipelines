@@ -17,8 +17,10 @@ def create_initial_workteam(
     )
 
     test_params["Arguments"]["team_name"] = workteam_name = (
-        utils.generate_random_string(5) + "-" + test_params["Arguments"]["team_name"]
+        f"{utils.generate_random_string(5)}-"
+        + test_params["Arguments"]["team_name"]
     )
+
 
     # First create a workteam using a separate pipeline and get the name, arn of the workteam created.
     create_workteamjob(
@@ -43,7 +45,7 @@ def test_groundtruth_labeling_job(
     kfp_client, experiment_id, region, sagemaker_client, test_file_dir
 ):
 
-    download_dir = utils.mkdir(os.path.join(test_file_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{test_file_dir}/generated"))
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),

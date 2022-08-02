@@ -115,9 +115,7 @@ class RoboMakerSimulationJobComponent(SageMakerComponent):
     ):
         outputs.output_artifacts = self._get_job_outputs()
         logging.info(
-            "Simulation Job in RoboMaker: https://{}.console.aws.amazon.com/robomaker/home?region={}#/simulationJobs/{}".format(
-                inputs.region, inputs.region, self._job_id
-            )
+            f"Simulation Job in RoboMaker: https://{inputs.region}.console.aws.amazon.com/robomaker/home?region={inputs.region}#/simulationJobs/{self._job_id}"
         )
 
     def _on_job_terminated(self):
@@ -224,9 +222,7 @@ class RoboMakerSimulationJobComponent(SageMakerComponent):
         outputs.job_id = self._job_id = job["arn"].split("/")[-1]
         logging.info(f"Started Robomaker Simulation Job with ID: {self._job_id}")
         logging.info(
-            "Simulation Job in RoboMaker: https://{}.console.aws.amazon.com/robomaker/home?region={}#/simulationJobs/{}".format(
-                inputs.region, inputs.region, self._job_id
-            )
+            f"Simulation Job in RoboMaker: https://{inputs.region}.console.aws.amazon.com/robomaker/home?region={inputs.region}#/simulationJobs/{self._job_id}"
         )
 
     def _print_logs_for_job(self):
@@ -239,8 +235,7 @@ class RoboMakerSimulationJobComponent(SageMakerComponent):
             dict: A dictionary of output S3 URIs.
         """
         response = self._rm_client.describe_simulation_job(job=self._arn)
-        artifact_uri = f"s3://{response['outputLocation']['s3Bucket']}/{response['outputLocation']['s3Prefix']}"
-        return artifact_uri
+        return f"s3://{response['outputLocation']['s3Bucket']}/{response['outputLocation']['s3Prefix']}"
 
 
 if __name__ == "__main__":

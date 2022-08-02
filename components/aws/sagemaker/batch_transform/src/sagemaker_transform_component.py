@@ -37,11 +37,11 @@ class SageMakerTransformComponent(SageMakerComponent):
     def Do(self, spec: SageMakerTransformSpec):
         self._transform_job_name = (
             spec.inputs.job_name
-            if spec.inputs.job_name
-            else SageMakerComponent._generate_unique_timestamped_id(
+            or SageMakerComponent._generate_unique_timestamped_id(
                 prefix="BatchTransform"
             )
         )
+
         super().Do(spec.inputs, spec.outputs, spec.output_paths)
 
     def _get_job_status(self) -> SageMakerJobStatus:
@@ -150,14 +150,11 @@ class SageMakerTransformComponent(SageMakerComponent):
     ):
         logging.info(f"Created Transform Job with name: {self._transform_job_name}")
         logging.info(
-            "Transform job in SageMaker: https://{}.console.aws.amazon.com/sagemaker/home?region={}#/jobs/{}".format(
-                inputs.region, inputs.region, self._transform_job_name,
-            )
+            f"Transform job in SageMaker: https://{inputs.region}.console.aws.amazon.com/sagemaker/home?region={inputs.region}#/jobs/{self._transform_job_name}"
         )
+
         logging.info(
-            "CloudWatch logs: https://{}.console.aws.amazon.com/cloudwatch/home?region={}#logStream:group=/aws/sagemaker/TransformJobs;prefix={};streamFilter=typeLogStreamPrefix".format(
-                inputs.region, inputs.region, self._transform_job_name,
-            )
+            f"CloudWatch logs: https://{inputs.region}.console.aws.amazon.com/cloudwatch/home?region={inputs.region}#logStream:group=/aws/sagemaker/TransformJobs;prefix={self._transform_job_name};streamFilter=typeLogStreamPrefix"
         )
 
     def _print_logs_for_job(self):

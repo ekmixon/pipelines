@@ -36,14 +36,13 @@ DATA_MODULE_ARGS = {"num_workers": 2}
 
 @pytest.fixture(scope="class")
 def trainer_params():
-    trainer_params = {
+    return {
         "module_file": "iris_classification.py",
         "data_module_file": "iris_data_module.py",
         "module_file_args": MODULE_FILE_ARGS,
         "data_module_args": DATA_MODULE_ARGS,
         "trainer_args": TRAINER_ARGS,
     }
-    return trainer_params
 
 
 MANDATORY_ARGS = [
@@ -56,16 +55,15 @@ DEFAULT_MODEL_NAME = "model_state_dict.pth"
 DEFAULT_SAVE_PATH = f"/tmp/{DEFAULT_MODEL_NAME}"
 
 
-def invoke_training(trainer_params):  # pylint: disable=W0621
+def invoke_training(trainer_params):    # pylint: disable=W0621
     """This function invokes the training process."""
-    trainer = Trainer(
+    return Trainer(
         module_file=trainer_params["module_file"],
         data_module_file=trainer_params["data_module_file"],
         module_file_args=trainer_params["module_file_args"],
         trainer_args=trainer_params["trainer_args"],
         data_module_args=trainer_params["data_module_args"],
     )
-    return trainer
 
 
 @pytest.mark.parametrize("mandatory_key", MANDATORY_ARGS)

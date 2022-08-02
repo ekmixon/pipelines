@@ -29,23 +29,15 @@ print(f"Export path: {EXPORT_PATH}")
 def mar_config():
     """Fixture - to use mar_config dict across unit tests
     """
-    mar_config = {
-        "MODEL_NAME":
-            "iris_classification",
-        "MODEL_FILE":
-            f"{IRIS_DIR}/iris_classification.py",
-        "HANDLER":
-            f"{IRIS_DIR}/iris_handler.py",
-        "SERIALIZED_FILE":
-            f"{EXPORT_PATH}/iris.pt",
-        "VERSION":
-            "1",
-        "EXPORT_PATH":
-            EXPORT_PATH,
-        "CONFIG_PROPERTIES":
-            "https://kubeflow-dataset.s3.us-east-2.amazonaws.com/config.properties", #pylint: disable=line-too-long
+    return {
+        "MODEL_NAME": "iris_classification",
+        "MODEL_FILE": f"{IRIS_DIR}/iris_classification.py",
+        "HANDLER": f"{IRIS_DIR}/iris_handler.py",
+        "SERIALIZED_FILE": f"{EXPORT_PATH}/iris.pt",
+        "VERSION": "1",
+        "EXPORT_PATH": EXPORT_PATH,
+        "CONFIG_PROPERTIES": "https://kubeflow-dataset.s3.us-east-2.amazonaws.com/config.properties",  # pylint: disable=line-too-long
     }
-    return mar_config
 
 
 MANDATORY_ARGS = [
@@ -121,8 +113,9 @@ def test_invalid_mar_config_parameter_value():
     tmp_dir = tempfile.mkdtemp()
 
     exception_msg = re.escape(
-        "mar_config is not optional. Received value: {}".format(mar_config)
+        f"mar_config is not optional. Received value: {mar_config}"
     )
+
     with pytest.raises(ValueError, match=exception_msg):
         MarGeneration(mar_config=mar_config, mar_save_path=tmp_dir)
 
@@ -197,9 +190,7 @@ def test_config_prop_invalid_url(mar_config):
     """Test mar generation with invalid config.properties url."""
     config_prop_url = "dummy"
     mar_config["CONFIG_PROPERTIES"] = "dummy"
-    exception_msg = (
-        "Unable to download config properties file using url - {}".
-        format(config_prop_url)
-    )
+    exception_msg = f"Unable to download config properties file using url - {config_prop_url}"
+
     with pytest.raises(ValueError, match=exception_msg):
         generate_mar_file(config=mar_config, save_path=EXPORT_PATH)

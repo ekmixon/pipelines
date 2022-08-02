@@ -34,13 +34,12 @@ def minio_inputs():
     Returns:
           minio_inputs : dict of inputs for minio uploads.
     """
-    minio_input = {
+    return {
         "bucket_name": "dummy",
         "source": f"{tmpdir}/dummy.txt",
         "destination": "dummy.txt",
         "endpoint": "localhost:9000",
     }
-    return minio_input
 
 
 def upload_to_minio(minio_inputs):

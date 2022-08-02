@@ -59,7 +59,7 @@ def run_command(cmd, *popenargs, **kwargs):
     if isinstance(cmd, str):
         cmd = cmd.split(" ")
     try:
-        print("executing command: {}".format(" ".join(cmd)))
+        print(f'executing command: {" ".join(cmd)}')
         return subprocess.check_output(
             cmd, *popenargs, stderr=subprocess.STDOUT, **kwargs
         )
@@ -77,10 +77,7 @@ def read_from_file_in_tar(file_path, file_name="data", decode=True):
     See: https://github.com/kubeflow/pipelines/blob/2e14fe732b3f878a710b16d1a63beece6c19330a/sdk/python/kfp/components/_components.py#L182
     """
     with tarfile.open(file_path).extractfile(file_name) as f:
-        if decode:
-            return f.read().decode()
-        else:
-            return f.read()
+        return f.read().decode() if decode else f.read()
 
 
 def replace_placeholders(input_filename, output_filename):
@@ -124,8 +121,10 @@ def generate_random_string(length):
     """Generate a random string with twice the length of input parameter."""
     assert isinstance(length, int)
     return "".join(
-        [random.choice(string.ascii_lowercase) for n in range(length)]
-        + [random.choice(string.digits) for n in range(length)]
+        (
+            [random.choice(string.ascii_lowercase) for _ in range(length)]
+            + [random.choice(string.digits) for _ in range(length)]
+        )
     )
 
 

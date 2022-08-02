@@ -57,8 +57,7 @@ def parse_arguments():
         help="Dry-run to compare against the existing files.",
     )
 
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 class ComponentCollectorContext:

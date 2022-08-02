@@ -107,7 +107,7 @@ def optimizer_pipeline():
     # Each stage depends on the completion of all trials in the previous stage (since only completed trials affect new trial suggesions).
     # Each optimization stage should result in better parameter set suggestions.
     all_metrics_for_parameter_sets = []
-    for stage in range(optimization_stages):
+    for _ in range(optimization_stages):
         parameter_sets = suggest_parameter_sets_from_measurements_op(
             parameter_specs=parameter_specs,
             metrics_for_parameter_sets=all_metrics_for_parameter_sets,

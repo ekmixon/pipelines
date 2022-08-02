@@ -7,16 +7,14 @@ from msrest.authentication import BasicAuthentication
 
 
 def get_client(organization, personal_access_token):
-    organization_url = 'https://dev.azure.com/' + organization
+    organization_url = f'https://dev.azure.com/{organization}'
 
     # Create a connection to the org
     credentials = BasicAuthentication('', personal_access_token)
     connection = Connection(base_url=organization_url,
                             creds=credentials)
 
-    # Get the build client
-    build_client = connection.clients_v6_0.get_build_client()
-    return build_client
+    return connection.clients_v6_0.get_build_client()
 
 
 def define_build(id, source_branch, source_version, parameters):
@@ -38,10 +36,7 @@ def define_build(id, source_branch, source_version, parameters):
 
 
 def queue_build(client, build, project):
-    # The failure responses from Azure Pipelines are pretty good,
-    # don't do any special handling.
-    queue_build_response = client.queue_build(build, project)
-    return queue_build_response
+    return client.queue_build(build, project)
 
 
 def main():

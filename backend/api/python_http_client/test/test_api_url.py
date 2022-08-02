@@ -34,13 +34,7 @@ class TestApiUrl(unittest.TestCase):
             params are included, when True both required and
             optional params are included """
         # model = kfp_server_api.models.api_url.ApiUrl()  # noqa: E501
-        if include_optional :
-            return ApiUrl(
-                pipeline_url = '0'
-            )
-        else :
-            return ApiUrl(
-        )
+        return ApiUrl(pipeline_url='0') if include_optional else ApiUrl()
 
     def testApiUrl(self):
         """Test ApiUrl"""

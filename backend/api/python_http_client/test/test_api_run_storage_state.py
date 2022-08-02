@@ -33,12 +33,7 @@ class TestApiRunStorageState(unittest.TestCase):
             include_option is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # model = kfp_server_api.models.api_run_storage_state.ApiRunStorageState()  # noqa: E501
-        if include_optional :
-            return ApiRunStorageState(
-            )
-        else :
-            return ApiRunStorageState(
+        return ApiRunStorageState(
         )
 
     def testApiRunStorageState(self):

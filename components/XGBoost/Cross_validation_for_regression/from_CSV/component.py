@@ -21,8 +21,8 @@ def xgboost_5_fold_cross_validation_for_regression(
 
     fold_metrics = {}
     for i in range(1, 6):
-        training_data = folds['train_' + str(i)]
-        testing_data = folds['test_' + str(i)]
+        training_data = folds[f'train_{str(i)}']
+        testing_data = folds[f'test_{str(i)}']
         model = xgboost_train_on_csv_op(
             training_data=training_data,
             label_column=label_column,
@@ -48,7 +48,7 @@ def xgboost_5_fold_cross_validation_for_regression(
             predicted_values=predictions,
         ).outputs['metrics']
 
-        fold_metrics['metrics_' + str(i)] = metrics
+        fold_metrics[f'metrics_{str(i)}'] = metrics
 
     aggregated_metrics_task = aggregate_regression_metrics_op(**fold_metrics)
 

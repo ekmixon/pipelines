@@ -9,7 +9,7 @@ from utils import get_s3_data_bucket
 
 
 def create_simulation_app(kfp_client, experiment_id, creat_app_dir, app_name):
-    download_dir = utils.mkdir(os.path.join(creat_app_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{creat_app_dir}/generated"))
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(creat_app_dir, "config.yaml"),
@@ -18,9 +18,10 @@ def create_simulation_app(kfp_client, experiment_id, creat_app_dir, app_name):
     )
 
     # Generate random prefix for sim app name
-    sim_app_name = test_params["Arguments"]["app_name"] = (
-        utils.generate_random_string(5) + "-" + app_name
-    )
+    sim_app_name = test_params["Arguments"][
+        "app_name"
+    ] = f"{utils.generate_random_string(5)}-{app_name}"
+
 
     _, _, workflow_json = kfp_client_utils.compile_run_monitor_pipeline(
         kfp_client,
@@ -44,7 +45,7 @@ def create_robot_app(client):
         }
     ]
     robomaker_suite = {"name": "ROS", "version": "Melodic"}
-    app_name = utils.generate_random_string(5) + "-test-robot-app"
+    app_name = f"{utils.generate_random_string(5)}-test-robot-app"
 
     response = robomaker_utils.create_robot_application(
         client, app_name, robomaker_sources, robomaker_suite
@@ -59,7 +60,7 @@ def test_create_simulation_app(
     kfp_client, experiment_id, robomaker_client, test_file_dir
 ):
 
-    download_dir = utils.mkdir(os.path.join(test_file_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{test_file_dir}/generated"))
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),
@@ -105,7 +106,7 @@ def test_delete_simulation_app(
     kfp_client, experiment_id, robomaker_client, test_file_dir
 ):
 
-    download_dir = utils.mkdir(os.path.join(test_file_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{test_file_dir}/generated"))
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),
@@ -158,7 +159,7 @@ def test_delete_simulation_app(
 )
 def test_run_simulation_job(kfp_client, experiment_id, robomaker_client, test_file_dir):
 
-    download_dir = utils.mkdir(os.path.join(test_file_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{test_file_dir}/generated"))
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),

@@ -22,7 +22,7 @@ def test_trainingjob(
     kfp_client, experiment_id, region, sagemaker_client, test_file_dir
 ):
 
-    download_dir = utils.mkdir(os.path.join(test_file_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{test_file_dir}/generated"))
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),
@@ -31,8 +31,10 @@ def test_trainingjob(
     )
 
     test_params["Arguments"]["job_name"] = input_job_name = (
-        utils.generate_random_string(5) + "-" + test_params["Arguments"]["job_name"]
+        f"{utils.generate_random_string(5)}-"
+        + test_params["Arguments"]["job_name"]
     )
+
     print(f"running test with job_name: {input_job_name}")
 
     _, _, workflow_json = kfp_client_utils.compile_run_monitor_pipeline(
@@ -94,8 +96,9 @@ def test_trainingjob(
 def test_terminate_trainingjob(kfp_client, experiment_id, sagemaker_client):
     test_file_dir = "resources/config/rlestimator-training"
     download_dir = utils.mkdir(
-        os.path.join(test_file_dir + "/generated_test_terminate")
+        os.path.join(f"{test_file_dir}/generated_test_terminate")
     )
+
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),
@@ -104,9 +107,10 @@ def test_terminate_trainingjob(kfp_client, experiment_id, sagemaker_client):
     )
 
     input_job_name = test_params["Arguments"]["job_name"] = (
-        "".join(random.choice(string.ascii_lowercase) for i in range(10))
+        "".join(random.choice(string.ascii_lowercase) for _ in range(10))
         + "-terminate-job"
     )
+
 
     run_id, _, workflow_json = kfp_client_utils.compile_run_monitor_pipeline(
         kfp_client,

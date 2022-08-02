@@ -39,9 +39,9 @@ class SageMakerTuningComponent(SageMakerComponent):
     def Do(self, spec: SageMakerTuningSpec):
         self._tuning_job_name = (
             spec.inputs.job_name
-            if spec.inputs.job_name
-            else self._generate_unique_timestamped_id(prefix="HPOJob")
+            or self._generate_unique_timestamped_id(prefix="HPOJob")
         )
+
         super().Do(spec.inputs, spec.outputs, spec.output_paths)
 
     def _get_job_status(self) -> SageMakerJobStatus:
@@ -249,16 +249,21 @@ class SageMakerTuningComponent(SageMakerComponent):
         if inputs.warm_start_type and inputs.parent_hpo_jobs:
             request["WarmStartConfig"]["WarmStartType"] = inputs.warm_start_type
             parent_jobs = [n.strip() for n in inputs.parent_hpo_jobs.split(",")]
-            for i in range(len(parent_jobs)):
-                request["WarmStartConfig"]["ParentHyperParameterTuningJobs"].append(
-                    {"HyperParameterTuningJobName": parent_jobs[i]}
-                )
+            for parent_job in parent_jobs:
+                request["WarmStartConfig"][
+                    "ParentHyperParameterTuningJobs"
+                ].append({"HyperParameterTuningJobName": parent_job})
+
         else:
-            if inputs.warm_start_type or inputs.parent_hpo_jobs:
-                if not inputs.warm_start_type:
-                    logging.error(
-                        'Must specify warm start type as either "IdenticalDataAndAlgorithm" or "TransferLearning".'
-                    )
+            if inputs.warm_start_type:
+                logging.error(
+                    "Must specify at least one parent hyperparameter tuning job"
+                )
+                raise Exception("Could not make job request")
+            elif inputs.parent_hpo_jobs:
+                logging.error(
+                    'Must specify warm start type as either "IdenticalDataAndAlgorithm" or "TransferLearning".'
+                )
                 if not inputs.parent_hpo_jobs:
                     logging.error(
                         "Must specify at least one parent hyperparameter tuning job"
@@ -282,17 +287,15 @@ class SageMakerTuningComponent(SageMakerComponent):
         outputs: SageMakerTuningOutputs,
     ):
         logging.info(
-            "Created Hyperparameter Training Job with name: " + self._tuning_job_name
+            f"Created Hyperparameter Training Job with name: {self._tuning_job_name}"
         )
+
         logging.info(
-            "HPO job in SageMaker: https://{}.console.aws.amazon.com/sagemaker/home?region={}#/hyper-tuning-jobs/{}".format(
-                inputs.region, inputs.region, self._tuning_job_name
-            )
+            f"HPO job in SageMaker: https://{inputs.region}.console.aws.amazon.com/sagemaker/home?region={inputs.region}#/hyper-tuning-jobs/{self._tuning_job_name}"
         )
+
         logging.info(
-            "CloudWatch logs: https://{}.console.aws.amazon.com/cloudwatch/home?region={}#logStream:group=/aws/sagemaker/TrainingJobs;prefix={};streamFilter=typeLogStreamPrefix".format(
-                inputs.region, inputs.region, self._tuning_job_name
-            )
+            f"CloudWatch logs: https://{inputs.region}.console.aws.amazon.com/cloudwatch/home?region={inputs.region}#logStream:group=/aws/sagemaker/TrainingJobs;prefix={self._tuning_job_name};streamFilter=typeLogStreamPrefix"
         )
 
     def _get_best_training_job_and_hyperparameters(self):

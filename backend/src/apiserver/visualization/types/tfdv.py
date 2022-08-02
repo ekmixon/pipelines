@@ -42,7 +42,6 @@ def get_statistics_html(
   """
 
   rhs_statistics = None
-  lhs_name = 'lhs_statistics'
   rhs_name = 'rhs_statistics'
 
   if not isinstance(lhs_statistics,
@@ -55,9 +54,7 @@ def get_statistics_html(
     raise ValueError('lhs_statistics proto contains multiple datasets. Only '
                      'one dataset is currently supported.')
 
-  if lhs_statistics.datasets[0].name:
-    lhs_name = lhs_statistics.datasets[0].name
-
+  lhs_name = lhs_statistics.datasets[0].name or 'lhs_statistics'
   # Add lhs stats.
   combined_statistics = statistics_pb2.DatasetFeatureStatisticsList()
   lhs_stats_copy = combined_statistics.datasets.add()
@@ -82,10 +79,7 @@ def get_statistics_html(
            facets_iframe.setAttribute('height', facets_iframe.contentWindow.document.body.offsetHeight + 'px')
          }, 1500)
          </script>"""
-  # pylint: enable=line-too-long
-  html = html_template.replace('protostr', protostr)
-
-  return html
+  return html_template.replace('protostr', protostr)
   
 stats = tfdv.load_statistics(source)
 html = get_statistics_html(stats)

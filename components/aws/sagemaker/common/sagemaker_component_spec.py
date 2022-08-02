@@ -107,16 +107,17 @@ class SageMakerComponentSpec(Generic[IT, OT]):
             **{
                 parsed_key_to_output_key.get(key): None
                 for key, _ in parsed_args.items()
-                if key in parsed_key_to_output_key.keys()
+                if key in parsed_key_to_output_key
             }
         )
+
 
         # Store the path arguments for when we write the values to files
         self._output_paths: OT = output_constructor(
             **{
                 parsed_key_to_output_key.get(key): value
                 for key, value in parsed_args.items()
-                if key in parsed_key_to_output_key.keys()
+                if key in parsed_key_to_output_key
             }
         )
 
@@ -137,7 +138,6 @@ class SageMakerComponentSpec(Generic[IT, OT]):
                     raise ValueError(
                         f"Output {key} is not of type {SageMakerComponentOutputValidator.__name__}"
                     )
-        pass
 
     @property
     def _parser(self):

@@ -41,7 +41,7 @@ def automl_create_model_for_tables(
     }
 
     create_model_response = client.create_model(location_path, model_dict)
-    print('Create model operation: {}'.format(create_model_response.operation))
+    print(f'Create model operation: {create_model_response.operation}')
     result = create_model_response.result()
     print(result)
     model_name = result.name

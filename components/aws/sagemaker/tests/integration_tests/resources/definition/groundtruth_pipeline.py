@@ -53,4 +53,4 @@ def ground_truth_test(
 
 
 if __name__ == "__main__":
-    kfp.compiler.Compiler().compile(ground_truth_test, __file__ + ".yaml")
+    kfp.compiler.Compiler().compile(ground_truth_test, f"{__file__}.yaml")

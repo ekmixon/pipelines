@@ -13,11 +13,11 @@ def build_list(
     Annotations:
         author: Alexey Volkov <alexey.volkov@ark-kun.com>
     """
-    result = []
-    for item in [item_1, item_2, item_3, item_4, item_5]:
-        if item is not None:
-            result.append(item)
-    return result
+    return [
+        item
+        for item in [item_1, item_2, item_3, item_4, item_5]
+        if item is not None
+    ]
 
 
 if __name__ == '__main__':

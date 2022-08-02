@@ -54,7 +54,7 @@ def GenerateProto(source):
     if not os.path.exists(output) or (
             os.path.exists(source) and
             os.path.getmtime(source) > os.path.getmtime(output)):
-        print("Generating %s..." % output)
+        print(f"Generating {output}...")
 
         if not os.path.exists(source):
             sys.stderr.write("Can't find required file: %s\n" % source)
@@ -65,11 +65,7 @@ def GenerateProto(source):
                              "or install the binary package.\n")
             sys.exit(-1)
 
-        protoc_command = [
-            PROTOC,
-            "-I%s" % PROTO_DIR,
-            "--python_out=%s" % PKG_DIR, source
-        ]
+        protoc_command = [PROTOC, f"-I{PROTO_DIR}", f"--python_out={PKG_DIR}", source]
         if subprocess.call(protoc_command) != 0:
             sys.exit(-1)
 

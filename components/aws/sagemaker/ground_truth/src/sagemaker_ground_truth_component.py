@@ -37,9 +37,9 @@ class SageMakerGroundTruthComponent(SageMakerComponent):
     def Do(self, spec: SageMakerGroundTruthSpec):
         self._labeling_job_name = (
             spec.inputs.job_name
-            if spec.inputs.job_name
-            else self._generate_unique_timestamped_id(prefix="LabelingJob")
+            or self._generate_unique_timestamped_id(prefix="LabelingJob")
         )
+
         super().Do(spec.inputs, spec.outputs, spec.output_paths)
 
     def _get_job_status(self) -> SageMakerJobStatus:
@@ -188,14 +188,13 @@ class SageMakerGroundTruthComponent(SageMakerComponent):
 
         ### Update or pop automatic labeling configs
         if inputs.enable_auto_labeling:
-            if (
-                task == "image classification"
-                or task == "bounding box"
-                or task == "text classification"
-            ):
-                labeling_algorithm_arn = "arn:aws:sagemaker:{}:027400017018:labeling-job-algorithm-specification/image-classification".format(
-                    inputs.region, auto_labeling_map[task]
-                )
+            if task in [
+                "image classification",
+                "bounding box",
+                "text classification",
+            ]:
+                labeling_algorithm_arn = f"arn:aws:sagemaker:{inputs.region}:027400017018:labeling-job-algorithm-specification/image-classification"
+
                 request["LabelingJobAlgorithmsConfig"][
                     "LabelingJobAlgorithmSpecificationArn"
                 ] = labeling_algorithm_arn
@@ -218,23 +217,21 @@ class SageMakerGroundTruthComponent(SageMakerComponent):
             request.pop("LabelingJobAlgorithmsConfig")
 
         ### Update pre-human and annotation consolidation task lambda functions
-        if (
-            task == "image classification"
-            or task == "bounding box"
-            or task == "text classification"
-            or task == "semantic segmentation"
-        ):
-            prehuman_arn = "arn:aws:lambda:{}:{}:function:PRE-{}".format(
-                inputs.region, algorithm_arn_map[inputs.region], task_map[task]
-            )
-            acs_arn = "arn:aws:lambda:{}:{}:function:ACS-{}".format(
-                inputs.region, algorithm_arn_map[inputs.region], task_map[task]
-            )
+        if task in [
+            "image classification",
+            "bounding box",
+            "text classification",
+            "semantic segmentation",
+        ]:
+            prehuman_arn = f"arn:aws:lambda:{inputs.region}:{algorithm_arn_map[inputs.region]}:function:PRE-{task_map[task]}"
+
+            acs_arn = f"arn:aws:lambda:{inputs.region}:{algorithm_arn_map[inputs.region]}:function:ACS-{task_map[task]}"
+
             request["HumanTaskConfig"]["PreHumanTaskLambdaArn"] = prehuman_arn
             request["HumanTaskConfig"]["AnnotationConsolidationConfig"][
                 "AnnotationConsolidationLambdaArn"
             ] = acs_arn
-        elif task == "custom" or task == "":
+        elif task in ["custom", ""]:
             if inputs.pre_human_task_function and inputs.post_human_task_function:
                 request["HumanTaskConfig"][
                     "PreHumanTaskLambdaArn"
@@ -292,9 +289,8 @@ class SageMakerGroundTruthComponent(SageMakerComponent):
 
             request["HumanTaskConfig"][
                 "WorkteamArn"
-            ] = "arn:aws:sagemaker:{}:394669845002:workteam/public-crowd/default".format(
-                inputs.region
-            )
+            ] = f"arn:aws:sagemaker:{inputs.region}:394669845002:workteam/public-crowd/default"
+
 
             dollars = int(inputs.workforce_task_price)
             cents = int(100 * (inputs.workforce_task_price - dollars))
@@ -333,9 +329,7 @@ class SageMakerGroundTruthComponent(SageMakerComponent):
             f"Created Ground Truth Labeling Job with name: {self._labeling_job_name}"
         )
         logging.info(
-            "Ground Truth job in SageMaker: https://{}.console.aws.amazon.com/sagemaker/groundtruth?region={}#/labeling-jobs/details/{}".format(
-                inputs.region, inputs.region, self._labeling_job_name
-            )
+            f"Ground Truth job in SageMaker: https://{inputs.region}.console.aws.amazon.com/sagemaker/groundtruth?region={inputs.region}#/labeling-jobs/details/{self._labeling_job_name}"
         )
 
 

@@ -80,7 +80,7 @@ def suggest_trials_in_gcp_ai_platform_optimizer(
         # Knowledge: The "done" key is just missing until the result is available
         if get_operation_response.get('done'):
             break
-        logging.info('Not finished yet: ' + str(get_operation_response))
+        logging.info(f'Not finished yet: {str(get_operation_response)}')
         time.sleep(10)
     operation_response = get_operation_response['response']
     suggested_trials = operation_response['trials']

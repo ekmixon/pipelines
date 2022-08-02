@@ -102,7 +102,7 @@ def add_measurement_for_trial_in_gcp_ai_platform_optimizer(
             ).execute()
             if get_operation_response.get('done'):
                 break
-            logging.info('Not finished yet: ' + str(get_operation_response))
+            logging.info(f'Not finished yet: {str(get_operation_response)}')
             time.sleep(10)
         operation_response = get_operation_response['response']
         should_stop_trial = operation_response['shouldStop']

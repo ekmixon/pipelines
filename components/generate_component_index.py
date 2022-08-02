@@ -39,7 +39,11 @@ for component_url in component_urls:
     component_path_line = ""
     for part_idx in range(parts_to_skip, len(path_parts) - 1):
         path_part = path_parts[part_idx]
-        part_url = f'https://github.com/{repo_org}/{repo_name}/tree/{commit_ref}/' + '/'.join(path_parts[0:part_idx + 1])
+        part_url = (
+            f'https://github.com/{repo_org}/{repo_name}/tree/{commit_ref}/'
+            + '/'.join(path_parts[: part_idx + 1])
+        )
+
         component_path_line += f' / [{path_part}]({part_url})'
 
     component_path_line += f' / [{component_name}]({component_url})'

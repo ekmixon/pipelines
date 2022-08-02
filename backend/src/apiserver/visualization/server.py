@@ -67,7 +67,7 @@ class VisualizationHandler(tornado.web.RequestHandler):
         try:
             arguments["arguments"] = json.loads(arguments.get("arguments"))
         except json.decoder.JSONDecodeError as e:
-            raise Exception("Invalid JSON provided as arguments: {}".format(str(e)))
+            raise Exception(f"Invalid JSON provided as arguments: {str(e)}")
 
         # If invalid JSON is provided that is incorretly escaped
         # arguments.get("arguments") can be a string. This Ensure that
@@ -80,9 +80,8 @@ class VisualizationHandler(tornado.web.RequestHandler):
         except tornado.web.MissingArgumentError:
             arguments["source"] = ""
 
-        if arguments.get("type") != "custom":
-            if len(arguments.get("source")) == 0:
-                raise Exception("No source provided.")
+        if arguments.get("type") != "custom" and len(arguments.get("source")) == 0:
+            raise Exception("No source provided.")
 
         return arguments
 
@@ -105,14 +104,14 @@ class VisualizationHandler(tornado.web.RequestHandler):
         """
         nb = new_notebook()
         nb.cells.append(exporter.create_cell_from_args(arguments))
-        nb.cells.append(new_code_cell('source = "{}"'.format(source)))
+        nb.cells.append(new_code_cell(f'source = "{source}"'))
         if visualization_type == "custom":
             code = arguments.get("code", [])
             nb.cells.append(exporter.create_cell_from_custom_code(code))
         else:
-            visualization_file = str(Path.cwd() / "types/{}.py".format(visualization_type))
+            visualization_file = str(Path.cwd() / f"types/{visualization_type}.py")
             nb.cells.append(exporter.create_cell_from_file(visualization_file))
-        
+
         return nb
 
     def get(self):

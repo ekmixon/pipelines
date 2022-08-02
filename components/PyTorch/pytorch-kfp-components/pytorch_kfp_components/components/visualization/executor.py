@@ -50,7 +50,7 @@ class Executor(BaseExecutor):  # pylint: disable=R0903
                 metadata_outputs = metadata[key]
                 metadata_outputs.append(metadata_dict)
 
-        print("Writing to file: {}".format(metadata_filepath))
+        print(f"Writing to file: {metadata_filepath}")
         with open(metadata_filepath, "w") as fp:
             json.dump(metadata, fp)
 
@@ -116,7 +116,7 @@ class Executor(BaseExecutor):  # pylint: disable=R0903
 
     def _generate_confusion_matrix(
         self, confusion_matrix_dict
-    ):  # pylint: disable=R0914
+    ):    # pylint: disable=R0914
         """Generates confusion matrix in minio."""
         actuals = confusion_matrix_dict["actuals"]
         preds = confusion_matrix_dict["preds"]
@@ -130,10 +130,10 @@ class Executor(BaseExecutor):  # pylint: disable=R0903
         cm = confusion_matrix(df["target"], df["predicted"], labels=vocab)
         data = []
         for target_index, target_row in enumerate(cm):
-            for predicted_index, count in enumerate(target_row):
-                data.append(
-                    (vocab[target_index], vocab[predicted_index], count)
-                )
+            data.extend(
+                (vocab[target_index], vocab[predicted_index], count)
+                for predicted_index, count in enumerate(target_row)
+            )
 
         confusion_matrix_df = pd.DataFrame(
             data, columns=["target", "predicted", "count"]

@@ -13,7 +13,7 @@ deploy_operation = components.load_component_from_file(file_path)
 
 # The deploy_image_name shall be the container image for the operation
 # It shall be something like <your_acr_name>.azurecr.io/deploy/aml-deploy-model:latest
-deploy_image_name = image_repo_name + '/aml-deploy-model:%s' % ('latest')
+deploy_image_name = image_repo_name + '/aml-deploy-model:latest'
 
 def use_image(image_name):
     def _use_image(task):
@@ -44,4 +44,4 @@ def model_deploy(
                                 apply(use_image(deploy_image_name))
 
 if __name__ == '__main__':
-    compiler.Compiler().compile(model_deploy,  __file__ + '.tar.gz')
+    compiler.Compiler().compile(model_deploy, f'{__file__}.tar.gz')

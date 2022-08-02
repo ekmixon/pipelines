@@ -37,9 +37,9 @@ class SageMakerProcessComponent(SageMakerComponent):
     def Do(self, spec: SageMakerProcessSpec):
         self._processing_job_name = (
             spec.inputs.job_name
-            if spec.inputs.job_name
-            else self._generate_unique_timestamped_id(prefix="ProcessingJob")
+            or self._generate_unique_timestamped_id(prefix="ProcessingJob")
         )
+
         super().Do(spec.inputs, spec.outputs, spec.output_paths)
 
     def _get_job_status(self) -> SageMakerJobStatus:
@@ -173,11 +173,9 @@ class SageMakerProcessComponent(SageMakerComponent):
         inputs: SageMakerProcessInputs,
         outputs: SageMakerProcessOutputs,
     ):
-        logging.info("Created Processing Job with name: " + self._processing_job_name)
+        logging.info(f"Created Processing Job with name: {self._processing_job_name}")
         logging.info(
-            "CloudWatch logs: https://{}.console.aws.amazon.com/cloudwatch/home?region={}#logStream:group=/aws/sagemaker/ProcessingJobs;prefix={};streamFilter=typeLogStreamPrefix".format(
-                inputs.region, inputs.region, self._processing_job_name
-            )
+            f"CloudWatch logs: https://{inputs.region}.console.aws.amazon.com/cloudwatch/home?region={inputs.region}#logStream:group=/aws/sagemaker/ProcessingJobs;prefix={self._processing_job_name};streamFilter=typeLogStreamPrefix"
         )
 
     def _print_logs_for_job(self):
@@ -194,11 +192,10 @@ class SageMakerProcessComponent(SageMakerComponent):
         response = self._sm_client.describe_processing_job(
             ProcessingJobName=self._processing_job_name
         )
-        outputs = {}
-        for output in response["ProcessingOutputConfig"]["Outputs"]:
-            outputs[output["OutputName"]] = output["S3Output"]["S3Uri"]
-
-        return outputs
+        return {
+            output["OutputName"]: output["S3Output"]["S3Uri"]
+            for output in response["ProcessingOutputConfig"]["Outputs"]
+        }
 
 
 if __name__ == "__main__":

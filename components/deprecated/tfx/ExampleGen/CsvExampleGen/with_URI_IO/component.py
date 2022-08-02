@@ -25,7 +25,7 @@ def CsvExampleGen(
     component_class_args = {}
 
     for name, execution_parameter in component_class.SPEC_CLASS.PARAMETERS.items():
-        argument_value = arguments.get(name, None)
+        argument_value = arguments.get(name)
         if argument_value is None:
             continue
         parameter_type = execution_parameter.type
@@ -37,8 +37,9 @@ def CsvExampleGen(
         component_class_args[name] = argument_value_obj
 
     for name, channel_parameter in component_class.SPEC_CLASS.INPUTS.items():
-        artifact_path = arguments.get(name + '_uri') or arguments.get(name + '_path')
-        if artifact_path:
+        if artifact_path := arguments.get(f'{name}_uri') or arguments.get(
+            f'{name}_path'
+        ):
             artifact = channel_parameter.type()
             artifact.uri = artifact_path.rstrip('/') + '/'  # Some TFX components require that the artifact URIs end with a slash
             if channel_parameter.type.PROPERTIES and 'split_names' in channel_parameter.type.PROPERTIES:
@@ -58,15 +59,16 @@ def CsvExampleGen(
 
     # Generating paths for output artifacts
     for name, channel in component_class_instance.outputs.items():
-        artifact_path = arguments.get('output_' + name + '_uri') or arguments.get(name + '_path')
-        if artifact_path:
+        if artifact_path := arguments.get(
+            f'output_{name}_uri'
+        ) or arguments.get(f'{name}_path'):
             artifact = channel.type()
             artifact.uri = artifact_path.rstrip('/') + '/'  # Some TFX components require that the artifact URIs end with a slash
             artifact_list = [artifact]
             channel._artifacts = artifact_list
             output_dict[name] = artifact_list
 
-    print('component instance: ' + str(component_class_instance))
+    print(f'component instance: {str(component_class_instance)}')
 
     executor_context = base_executor.BaseExecutor.Context(
         beam_pipeline_args=arguments.get('beam_pipeline_args'),

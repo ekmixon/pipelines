@@ -84,7 +84,7 @@ def optimizer_pipeline(
     # Each stage depends on the completion of all trials in the previous stage (since only completed trials affect new trial suggesions).
     # Each optimization stage should result in better parameter set suggestions.
     trial_measurement_tasks = []
-    for stage in range(optimization_stages):
+    for _ in range(optimization_stages):
         suggest_trials_task = optimizer_suggest_trials_op(
             study_name=study_name,
             suggestion_count=suggestion_count,

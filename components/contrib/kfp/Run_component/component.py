@@ -22,7 +22,7 @@ def run_component_or_pipeline(
         endpoint = 'http://' + os.environ['ML_PIPELINE_SERVICE_HOST'] + ':' + os.environ['ML_PIPELINE_SERVICE_PORT']
     create_run_result = kfp.Client(host=endpoint).create_run_from_pipeline_func(op, arguments=arguments)
     run_id = str(create_run_result.run_id)
-    print('Submitted run: ' + run_id)
+    print(f'Submitted run: {run_id}')
     run_url = f'{endpoint.rstrip("/")}/#/runs/details/{run_id}'
     print(run_url)
     print('Waiting for the run to finish...')

@@ -78,7 +78,7 @@ def automl_create_tables_dataset_from_csv(
         (bucket_name, blob_prefix) = gcs_staging_uri[5:].split('/', 1)
         bucket = storage_client.get_bucket(bucket_name)
     else:
-        bucket_name = gcp_project_id + '_staging_' + gcp_region
+        bucket_name = f'{gcp_project_id}_staging_{gcp_region}'
         try:
             bucket = storage_client.get_bucket(bucket_name)
         except Exception as ex:
@@ -98,7 +98,7 @@ def automl_create_tables_dataset_from_csv(
     logging.info(f'Uploading training data to {training_data_blob_uri}')
     training_data_blob.upload_from_filename(data_path)
 
-    logging.info(f'Creating AutoML Tables dataset.')
+    logging.info('Creating AutoML Tables dataset.')
     automl_client = automl.AutoMlClient()
 
     project_location_path = f'projects/{gcp_project_id}/locations/{gcp_region}'
@@ -130,11 +130,12 @@ def automl_create_tables_dataset_from_csv(
     dataset = automl_client.get_dataset(
         name=dataset.name,
     )
-    logging.info(f'Finished importing data.')
+    logging.info('Finished importing data.')
 
     logging.info('Updating column specs')
     target_column_spec = None
-    primary_table_spec_name = dataset.name + '/tableSpecs/' + dataset.tables_dataset_metadata.primary_table_spec_id
+    primary_table_spec_name = f'{dataset.name}/tableSpecs/{dataset.tables_dataset_metadata.primary_table_spec_id}'
+
     table_specs_list = list(automl_client.list_table_specs(
         parent=dataset.name,
     ))

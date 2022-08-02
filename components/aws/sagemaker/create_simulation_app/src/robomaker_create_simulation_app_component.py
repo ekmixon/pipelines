@@ -38,11 +38,11 @@ class RoboMakerCreateSimulationAppComponent(SageMakerComponent):
     def Do(self, spec: RoboMakerCreateSimulationAppSpec):
         self._app_name = (
             spec.inputs.app_name
-            if spec.inputs.app_name
-            else RoboMakerCreateSimulationAppComponent._generate_unique_timestamped_id(
+            or RoboMakerCreateSimulationAppComponent._generate_unique_timestamped_id(
                 prefix="SimulationApplication"
             )
         )
+
         super().Do(spec.inputs, spec.outputs, spec.output_paths)
 
     def _get_job_status(self) -> SageMakerJobStatus:
@@ -97,9 +97,7 @@ class RoboMakerCreateSimulationAppComponent(SageMakerComponent):
         outputs.version = job["version"]
         outputs.revision_id = job["revisionId"]
         logging.info(
-            "Simulation Application in RoboMaker: https://{}.console.aws.amazon.com/robomaker/home?region={}#/simulationApplications/{}".format(
-                inputs.region, inputs.region, str(outputs.arn).split("/", 1)[1]
-            )
+            f'Simulation Application in RoboMaker: https://{inputs.region}.console.aws.amazon.com/robomaker/home?region={inputs.region}#/simulationApplications/{str(outputs.arn).split("/", 1)[1]}'
         )
 
     def _on_job_terminated(self):

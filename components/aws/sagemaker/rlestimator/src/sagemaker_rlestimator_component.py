@@ -42,11 +42,11 @@ class SageMakerRLEstimatorComponent(SageMakerComponent):
     def Do(self, spec: SageMakerRLEstimatorSpec):
         self._rlestimator_job_name = (
             spec.inputs.job_name
-            if spec.inputs.job_name
-            else SageMakerComponent._generate_unique_timestamped_id(
+            or SageMakerComponent._generate_unique_timestamped_id(
                 prefix="RLEstimatorJob"
             )
         )
+
         super().Do(spec.inputs, spec.outputs, spec.output_paths)
 
     def _configure_aws_clients(self, inputs: SageMakerComponentCommonInputs):
@@ -76,7 +76,7 @@ class SageMakerRLEstimatorComponent(SageMakerComponent):
         )
         status = response["TrainingJobStatus"]
 
-        if status == "Completed" or status == "Stopped":
+        if status in ["Completed", "Stopped"]:
             return self._get_debug_rule_status()
         if status == "Failed":
             message = response["FailureReason"]
@@ -188,12 +188,8 @@ class SageMakerRLEstimatorComponent(SageMakerComponent):
         # We need to configure region and it is not something we can do via the RLEstimator class.
 
         # Only use max wait time default value if electing to use spot instances
-        if not inputs.spot_instance:
-            max_wait_time = None
-        else:
-            max_wait_time = inputs.max_wait_time
-
-        estimator = RLEstimator(
+        max_wait_time = inputs.max_wait_time if inputs.spot_instance else None
+        return RLEstimator(
             entry_point=inputs.entry_point,
             source_dir=inputs.source_dir,
             image_uri=inputs.image,
@@ -219,15 +215,12 @@ class SageMakerRLEstimatorComponent(SageMakerComponent):
             sagemaker_session=self._sagemaker_session,
         )
 
-        return estimator
-
     def _submit_job_request(self, estimator: RLEstimator) -> object:
         # By setting wait to false we don't block the current thread.
         estimator.fit(job_name=self._rlestimator_job_name, wait=False)
         job_name = estimator.latest_training_job.job_name
         self._rlestimator_job_name = job_name
-        response = self._sm_client.describe_training_job(TrainingJobName=job_name)
-        return response
+        return self._sm_client.describe_training_job(TrainingJobName=job_name)
 
     def _after_submit_job_request(
         self,
@@ -238,34 +231,24 @@ class SageMakerRLEstimatorComponent(SageMakerComponent):
     ):
         logging.info(f"Created Training Job with name: {self._rlestimator_job_name}")
         logging.info(
-            "Training job in SageMaker: https://{}.console.aws.amazon.com/sagemaker/home?region={}#/jobs/{}".format(
-                inputs.region, inputs.region, self._rlestimator_job_name,
-            )
+            f"Training job in SageMaker: https://{inputs.region}.console.aws.amazon.com/sagemaker/home?region={inputs.region}#/jobs/{self._rlestimator_job_name}"
         )
+
         logging.info(
-            "CloudWatch logs: https://{}.console.aws.amazon.com/cloudwatch/home?region={}#logStream:group=/aws/sagemaker/TrainingJobs;prefix={};streamFilter=typeLogStreamPrefix".format(
-                inputs.region, inputs.region, self._rlestimator_job_name,
-            )
+            f"CloudWatch logs: https://{inputs.region}.console.aws.amazon.com/cloudwatch/home?region={inputs.region}#logStream:group=/aws/sagemaker/TrainingJobs;prefix={self._rlestimator_job_name};streamFilter=typeLogStreamPrefix"
         )
 
     @staticmethod
     def _get_toolkit(toolkit_type: str) -> RLToolkit:
-        if toolkit_type == "":
-            return None
-        return RLToolkit[toolkit_type.upper()]
+        return RLToolkit[toolkit_type.upper()] if toolkit_type else None
 
     @staticmethod
     def _get_framework(framework_type: str) -> RLFramework:
-        if framework_type == "":
-            return None
-        return RLFramework[framework_type.upper()]
+        return RLFramework[framework_type.upper()] if framework_type else None
 
     @staticmethod
     def _nullable(value: str):
-        if value:
-            return value
-        else:
-            return None
+        return value or None
 
 
 if __name__ == "__main__":

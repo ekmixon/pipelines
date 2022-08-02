@@ -28,12 +28,13 @@ def get_artifact_in_minio(workflow_json, step_name, artifact_name, output_dir):
         "artifactRepository"
     ]["s3"]["bucket"]
     minio_client = Minio(
-        "localhost:{}".format(minio_port),
+        f"localhost:{minio_port}",
         access_key=minio_access_key,
         secret_key=minio_secret_key,
         secure=False,
     )
-    output_file = os.path.join(output_dir, artifact_name + ".tgz")
+
+    output_file = os.path.join(output_dir, f"{artifact_name}.tgz")
     minio_client.fget_object(s3_bucket, s3_data["key"], output_file)
     # https://docs.min.io/docs/python-client-api-reference.html#fget_object
 
@@ -46,7 +47,8 @@ def artifact_download_iterator(workflow_json, outputs_dict, output_dir):
         output_files[step_name] = {}
         for artifact in artifacts:
             output_files[step_name][artifact] = get_artifact_in_minio(
-                workflow_json, step_name, step_name + "-" + artifact, output_dir
+                workflow_json, step_name, f"{step_name}-{artifact}", output_dir
             )
+
 
     return output_files

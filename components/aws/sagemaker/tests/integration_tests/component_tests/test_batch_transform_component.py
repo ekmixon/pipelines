@@ -27,7 +27,7 @@ def test_transform_job(
     test_file_dir,
 ):
 
-    download_dir = utils.mkdir(os.path.join(test_file_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{test_file_dir}/generated"))
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),
@@ -39,8 +39,10 @@ def test_transform_job(
     test_params["Arguments"]["model_name"] = test_params["Arguments"][
         "job_name"
     ] = input_job_name = (
-        utils.generate_random_string(5) + "-" + test_params["Arguments"]["model_name"]
+        f"{utils.generate_random_string(5)}-"
+        + test_params["Arguments"]["model_name"]
     )
+
     print(f"running test with model/job name: {input_job_name}")
 
     # Generate unique location for output since output filename is generated according to the content_type
@@ -93,8 +95,9 @@ def test_transform_job(
 def test_terminate_transformJob(kfp_client, experiment_id, region, sagemaker_client):
     test_file_dir = "resources/config/kmeans-mnist-batch-transform"
     download_dir = utils.mkdir(
-        os.path.join(test_file_dir + "/generated_test_terminate")
+        os.path.join(f"{test_file_dir}/generated_test_terminate")
     )
+
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),
@@ -105,7 +108,8 @@ def test_terminate_transformJob(kfp_client, experiment_id, region, sagemaker_cli
     # Generate random prefix for model, job name to avoid errors if resources with same name exists
     test_params["Arguments"]["model_name"] = test_params["Arguments"][
         "job_name"
-    ] = input_job_name = (utils.generate_random_string(4) + "-terminate-job")
+    ] = input_job_name = f"{utils.generate_random_string(4)}-terminate-job"
+
 
     run_id, _, workflow_json = kfp_client_utils.compile_run_monitor_pipeline(
         kfp_client,

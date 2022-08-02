@@ -64,7 +64,7 @@ class RunServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.archive_run_with_http_info(id, **kwargs)  # noqa: E501
 
-    def archive_run_with_http_info(self, id, **kwargs):  # noqa: E501
+    def archive_run_with_http_info(self, id, **kwargs):    # noqa: E501
         """Archives a run.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -97,16 +97,12 @@ class RunServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'id'
+            'id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -129,15 +125,13 @@ class RunServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -186,7 +180,7 @@ class RunServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.create_run_with_http_info(body, **kwargs)  # noqa: E501
 
-    def create_run_with_http_info(self, body, **kwargs):  # noqa: E501
+    def create_run_with_http_info(self, body, **kwargs):    # noqa: E501
         """Creates a new run.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -219,16 +213,12 @@ class RunServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'body'
+            'body',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -249,17 +239,13 @@ class RunServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
-        body_params = None
-        if 'body' in local_var_params:
-            body_params = local_var_params['body']
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        body_params = local_var_params.get('body')
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # HTTP header `Content-Type`
         header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
@@ -312,7 +298,7 @@ class RunServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.delete_run_with_http_info(id, **kwargs)  # noqa: E501
 
-    def delete_run_with_http_info(self, id, **kwargs):  # noqa: E501
+    def delete_run_with_http_info(self, id, **kwargs):    # noqa: E501
         """Deletes a run.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -345,16 +331,12 @@ class RunServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'id'
+            'id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -377,15 +359,13 @@ class RunServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -434,7 +414,7 @@ class RunServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.get_run_with_http_info(run_id, **kwargs)  # noqa: E501
 
-    def get_run_with_http_info(self, run_id, **kwargs):  # noqa: E501
+    def get_run_with_http_info(self, run_id, **kwargs):    # noqa: E501
         """Finds a specific run by ID.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -467,16 +447,12 @@ class RunServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'run_id'
+            'run_id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -499,15 +475,13 @@ class RunServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -566,7 +540,7 @@ class RunServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.list_runs_with_http_info(**kwargs)  # noqa: E501
 
-    def list_runs_with_http_info(self, **kwargs):  # noqa: E501
+    def list_runs_with_http_info(self, **kwargs):    # noqa: E501
         """Finds all runs.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -614,16 +588,12 @@ class RunServiceApi(object):
             'sort_by',
             'resource_reference_key_type',
             'resource_reference_key_id',
-            'filter'
+            'filter',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -652,15 +622,13 @@ class RunServiceApi(object):
         if 'filter' in local_var_params and local_var_params['filter'] is not None:  # noqa: E501
             query_params.append(('filter', local_var_params['filter']))  # noqa: E501
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -713,7 +681,7 @@ class RunServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.read_artifact_with_http_info(run_id, node_id, artifact_name, **kwargs)  # noqa: E501
 
-    def read_artifact_with_http_info(self, run_id, node_id, artifact_name, **kwargs):  # noqa: E501
+    def read_artifact_with_http_info(self, run_id, node_id, artifact_name, **kwargs):    # noqa: E501
         """Finds a run's artifact data.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -752,16 +720,12 @@ class RunServiceApi(object):
         all_params = [
             'run_id',
             'node_id',
-            'artifact_name'
+            'artifact_name',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -796,15 +760,13 @@ class RunServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -855,7 +817,7 @@ class RunServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.report_run_metrics_with_http_info(run_id, body, **kwargs)  # noqa: E501
 
-    def report_run_metrics_with_http_info(self, run_id, body, **kwargs):  # noqa: E501
+    def report_run_metrics_with_http_info(self, run_id, body, **kwargs):    # noqa: E501
         """ReportRunMetrics reports metrics of a run. Each metric is reported in its own transaction, so this API accepts partial failures. Metric can be uniquely identified by (run_id, node_id, name). Duplicate reporting will be ignored by the API. First reporting wins.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -891,16 +853,12 @@ class RunServiceApi(object):
 
         all_params = [
             'run_id',
-            'body'
+            'body',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -927,17 +885,13 @@ class RunServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
-        body_params = None
-        if 'body' in local_var_params:
-            body_params = local_var_params['body']
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        body_params = local_var_params.get('body')
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # HTTP header `Content-Type`
         header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
@@ -990,7 +944,7 @@ class RunServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.retry_run_with_http_info(run_id, **kwargs)  # noqa: E501
 
-    def retry_run_with_http_info(self, run_id, **kwargs):  # noqa: E501
+    def retry_run_with_http_info(self, run_id, **kwargs):    # noqa: E501
         """Re-initiates a failed or terminated run.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1023,16 +977,12 @@ class RunServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'run_id'
+            'run_id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1055,15 +1005,13 @@ class RunServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -1112,7 +1060,7 @@ class RunServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.terminate_run_with_http_info(run_id, **kwargs)  # noqa: E501
 
-    def terminate_run_with_http_info(self, run_id, **kwargs):  # noqa: E501
+    def terminate_run_with_http_info(self, run_id, **kwargs):    # noqa: E501
         """Terminates an active run.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1145,16 +1093,12 @@ class RunServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'run_id'
+            'run_id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1177,15 +1121,13 @@ class RunServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -1234,7 +1176,7 @@ class RunServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.unarchive_run_with_http_info(id, **kwargs)  # noqa: E501
 
-    def unarchive_run_with_http_info(self, id, **kwargs):  # noqa: E501
+    def unarchive_run_with_http_info(self, id, **kwargs):    # noqa: E501
         """Restores an archived run.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -1267,16 +1209,12 @@ class RunServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'id'
+            'id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -1299,15 +1237,13 @@ class RunServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501

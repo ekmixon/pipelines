@@ -153,10 +153,7 @@ class SageMakerComponentCompiler(object):
                 input_spec.__dict__["default"] = ""
             inputs.append(input_spec)
 
-            # Add arguments to input list
-            args.append(f"--{key}")
-            args.append(InputValuePlaceholder(input_name=key))
-
+            args.extend((f"--{key}", InputValuePlaceholder(input_name=key)))
         for key, _output in spec.OUTPUTS.__dict__.items():
             output_validator: SageMakerComponentOutputValidator = cast(
                 SageMakerComponentOutputValidator, _output
@@ -165,9 +162,12 @@ class SageMakerComponentCompiler(object):
                 OutputSpec(name=key, description=output_validator.description)
             )
 
-            # Add arguments to input list
-            args.append(f"--{key}{SageMakerComponentSpec.OUTPUT_ARGUMENT_SUFFIX}")
-            args.append(OutputPathPlaceholder(output_name=key))
+            args.extend(
+                (
+                    f"--{key}{SageMakerComponentSpec.OUTPUT_ARGUMENT_SUFFIX}",
+                    OutputPathPlaceholder(output_name=key),
+                )
+            )
 
         return IOArgs(inputs=inputs, outputs=outputs, args=args)
 
@@ -248,9 +248,7 @@ class SageMakerComponentCompiler(object):
                     )
                 )
 
-        if len(diff_results) == 0:
-            return False
-        return "\n".join(diff_results)
+        return "\n".join(diff_results) if diff_results else False
 
     @staticmethod
     def compile(

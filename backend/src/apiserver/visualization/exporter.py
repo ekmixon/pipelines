@@ -53,7 +53,7 @@ def create_cell_from_args(variables: dict) -> NotebookNode:
         NotebookNode with provided arguments as variables.
 
     """
-    return new_code_cell("variables = {}".format(repr(variables)))
+    return new_code_cell(f"variables = {repr(variables)}")
 
 
 def create_cell_from_file(filepath: Text) -> NotebookNode:
@@ -144,7 +144,7 @@ class Exporter:
         """
         # HTML generator and exporter object
         html_exporter = HTMLExporter()
-        template_file = "templates/{}.tpl".format(self.template_type.value)
+        template_file = f"templates/{self.template_type.value}.tpl"
         html_exporter.template_file = str(Path.cwd() / template_file)
         # Output generator
         self.ep.preprocess(nb, {"metadata": {"path": Path.cwd()}}, self.km)

@@ -12,7 +12,7 @@ from utils import sagemaker_utils
 )
 def test_createmodel(kfp_client, experiment_id, sagemaker_client, test_file_dir):
 
-    download_dir = utils.mkdir(os.path.join(test_file_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{test_file_dir}/generated"))
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),
@@ -22,8 +22,10 @@ def test_createmodel(kfp_client, experiment_id, sagemaker_client, test_file_dir)
 
     # Generate random prefix for model name to avoid errors if model with same name exists
     test_params["Arguments"]["model_name"] = input_model_name = (
-        utils.generate_random_string(5) + "-" + test_params["Arguments"]["model_name"]
+        f"{utils.generate_random_string(5)}-"
+        + test_params["Arguments"]["model_name"]
     )
+
     print(f"running test with model_name: {input_model_name}")
 
     _, _, workflow_json = kfp_client_utils.compile_run_monitor_pipeline(

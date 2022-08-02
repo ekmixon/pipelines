@@ -42,11 +42,8 @@ if not variables.get("is_generated", False):
     schema = json.loads(file_io.read_file_to_string(schema_file))
     names = [x["name"] for x in schema]
 
-    dfs = []
     files = file_io.get_matching_files(source)
-    for f in files:
-        dfs.append(pd.read_csv(f, names=names))
-
+    dfs = [pd.read_csv(f, names=names) for f in files]
     df = pd.concat(dfs)
     if variables.get("target_lambda", False):
         df["target"] = df.apply(eval(variables.get("target_lambda", "")), axis=1)

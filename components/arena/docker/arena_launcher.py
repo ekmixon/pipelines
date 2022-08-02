@@ -49,7 +49,7 @@ def main(argv=None):
   parser.add_argument('--output-dir', type=str, default='')
   parser.add_argument('--output-data', type=str, default='None')
   parser.add_argument('--log-dir', type=str, default='')
-  
+
   parser.add_argument('--image', type=str)
   parser.add_argument('--gpus', type=int, default=0)
   parser.add_argument('--cpu', type=str, default='0')
@@ -78,7 +78,7 @@ def main(argv=None):
   separator_idx = all_args.index('--')
   launcher_args = all_args[:separator_idx]
   remaining_args = all_args[separator_idx + 1:]
-  
+
   args = parser.parse_args(launcher_args)
   commandArray, job_type = args.func(args)
 
@@ -101,13 +101,13 @@ def main(argv=None):
 
   commandArray.append('"{0}"'.format(internalCommand))
   command = ' '.join(commandArray)
-  
+
   command=command.replace("--name={0}".format(name),"--name={0}".format(fullname))
-  
+
   logging.info('Start training {0}.'.format(command))
-  
+
   submit_job(command)
-  
+
   succ = True
 
   # wait for job done
@@ -117,9 +117,9 @@ def main(argv=None):
 
   rc = job_logging(fullname, job_type)
   logging.info("rc: {0}".format(rc))
-  
+
   wait_job_done(fullname, job_type, datetime.timedelta(hours=timeout_hours))
-  
+
   status = get_job_status(fullname, job_type)
 
   if status == "SUCCEEDED":

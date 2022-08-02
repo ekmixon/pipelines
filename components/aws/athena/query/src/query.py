@@ -33,7 +33,7 @@ def query(client, query, database, output, workgroup=None):
         ResultConfiguration={"OutputLocation": output,},
     )
     if workgroup:
-        params.update(dict(WorkGroup=workgroup))
+        params |= dict(WorkGroup=workgroup)
 
     response = client.start_query_execution(**params)
 
@@ -46,8 +46,8 @@ def query(client, query, database, output, workgroup=None):
         5  # TODO: this should be an optional parameter from users. or use timeout
     )
 
-    while max_execution > 0 and state in ["RUNNING"]:
-        max_execution = max_execution - 1
+    while max_execution > 0 and state in {"RUNNING"}:
+        max_execution -= 1
         response = client.get_query_execution(QueryExecutionId=execution_id)
 
         if (
@@ -68,15 +68,12 @@ def query(client, query, database, output, workgroup=None):
                 break
         time.sleep(5)
 
-    # TODO:(@Jeffwan) Add more details.
-    result = {
+    return {
         "total_bytes_processed": response["QueryExecution"]["Statistics"][
             "DataScannedInBytes"
         ],
         "filename": filename,
     }
-
-    return result
 
 
 def main():

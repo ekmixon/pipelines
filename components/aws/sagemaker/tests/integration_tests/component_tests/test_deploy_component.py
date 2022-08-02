@@ -56,7 +56,7 @@ def test_create_endpoint(
     kfp_client, experiment_id, boto3_session, sagemaker_client, test_file_dir
 ):
 
-    download_dir = utils.mkdir(os.path.join(test_file_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{test_file_dir}/generated"))
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),
@@ -69,8 +69,10 @@ def test_create_endpoint(
     test_params["Arguments"]["model_name"] = test_params["Arguments"][
         "endpoint_config_name"
     ] = test_params["Arguments"]["endpoint_name"] = input_endpoint_name = (
-        utils.generate_random_string(5) + "-" + test_params["Arguments"]["model_name"]
+        f"{utils.generate_random_string(5)}-"
+        + test_params["Arguments"]["model_name"]
     )
+
 
     try:
         print(f"running test with model/endpoint name: {input_endpoint_name}")

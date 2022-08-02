@@ -38,5 +38,5 @@ def robomaker_create_simulation_app_test(
 
 if __name__ == "__main__":
     kfp.compiler.Compiler().compile(
-        robomaker_create_simulation_app_test, __file__ + ".yaml"
+        robomaker_create_simulation_app_test, f"{__file__}.yaml"
     )

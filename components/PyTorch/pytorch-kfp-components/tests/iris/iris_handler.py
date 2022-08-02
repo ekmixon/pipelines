@@ -46,8 +46,7 @@ class IRISClassifierHandler(BaseHandler):
             input_data_str = data[0].get("body")
 
         input_data = input_data_str.decode("utf-8")
-        input_tensor = torch.Tensor(ast.literal_eval(input_data))
-        return input_tensor
+        return torch.Tensor(ast.literal_eval(input_data))
 
     def postprocess(self, inference_output):
         """
@@ -60,9 +59,7 @@ class IRISClassifierHandler(BaseHandler):
 
         predicted_idx = str(np.argmax(inference_output.cpu().detach().numpy()))
 
-        if self.mapping:
-            return [self.mapping[str(predicted_idx)]]
-        return [predicted_idx]
+        return [self.mapping[predicted_idx]] if self.mapping else [predicted_idx]
 
 
 _service = IRISClassifierHandler()

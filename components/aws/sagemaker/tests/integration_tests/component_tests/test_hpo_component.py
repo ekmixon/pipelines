@@ -16,7 +16,7 @@ def test_hyperparameter_tuning(
     kfp_client, experiment_id, region, sagemaker_client, test_file_dir
 ):
 
-    download_dir = utils.mkdir(os.path.join(test_file_dir + "/generated"))
+    download_dir = utils.mkdir(os.path.join(f"{test_file_dir}/generated"))
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),
@@ -25,8 +25,10 @@ def test_hyperparameter_tuning(
     )
     if "job_name" in test_params["Arguments"]:
         test_params["Arguments"]["job_name"] = (
-            utils.generate_random_string(5) + "-" + test_params["Arguments"]["job_name"]
+            f"{utils.generate_random_string(5)}-"
+            + test_params["Arguments"]["job_name"]
         )
+
 
     _, _, workflow_json = kfp_client_utils.compile_run_monitor_pipeline(
         kfp_client,
@@ -109,8 +111,9 @@ def test_hyperparameter_tuning(
 def test_terminate_hpojob(kfp_client, experiment_id, region, sagemaker_client):
     test_file_dir = "resources/config/kmeans-mnist-hpo"
     download_dir = utils.mkdir(
-        os.path.join(test_file_dir + "/generated_test_terminate")
+        os.path.join(f"{test_file_dir}/generated_test_terminate")
     )
+
     test_params = utils.load_params(
         utils.replace_placeholders(
             os.path.join(test_file_dir, "config.yaml"),
@@ -118,9 +121,10 @@ def test_terminate_hpojob(kfp_client, experiment_id, region, sagemaker_client):
         )
     )
 
-    input_job_name = test_params["Arguments"]["job_name"] = (
-        utils.generate_random_string(4) + "-terminate-job"
-    )
+    input_job_name = test_params["Arguments"][
+        "job_name"
+    ] = f"{utils.generate_random_string(4)}-terminate-job"
+
 
     run_id, _, workflow_json = kfp_client_utils.compile_run_monitor_pipeline(
         kfp_client,

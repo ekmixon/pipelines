@@ -27,13 +27,11 @@ class SpecInputParsers:
     def nullable_string_argument(value):
         """Strips strings and returns None if they are empty."""
         value = value.strip()
-        if not value:
-            return None
-        return value
+        return value or None
 
     @staticmethod
     def _yaml_or_json_str(value):
-        if value == "" or value == None:
+        if value == "" or value is None:
             return None
         try:
             return json.loads(value)

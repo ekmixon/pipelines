@@ -72,11 +72,9 @@ def generate_options(args):
         options.append("--env=STEP_NAME={0}".format(args.step_name))
 
     if len(sync_source) > 0:
-      if not sync_source.endswith(".git"):
-        raise ValueError("sync_source must be an http git url")
-      options.extend(['--sync-mode','git'])
-      options.extend(['--sync-source',sync_source])
-
+        if not sync_source.endswith(".git"):
+          raise ValueError("sync_source must be an http git url")
+        options.extend(['--sync-mode', 'git', '--sync-source', sync_source])
     return options
 
 # Generate standalone job

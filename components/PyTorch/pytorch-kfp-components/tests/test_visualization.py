@@ -40,18 +40,15 @@ def viz_params():
         },
     }
 
-    viz_param = {
-        "mlpipeline_ui_metadata":
-        os.path.join(metdata_dir, "mlpipeline_ui_metadata.json"),
-        "mlpipeline_metrics":
-        os.path.join(metdata_dir, "mlpipeline_metrics"),
+    return {
+        "mlpipeline_ui_metadata": os.path.join(
+            metdata_dir, "mlpipeline_ui_metadata.json"
+        ),
+        "mlpipeline_metrics": os.path.join(metdata_dir, "mlpipeline_metrics"),
         "confusion_matrix_dict": {},
-        "test_accuracy":
-        99.05,
-        "markdown":
-        markdown_params,
+        "test_accuracy": 99.05,
+        "markdown": markdown_params,
     }
-    return viz_param
 
 
 @pytest.fixture(scope="class")
@@ -61,13 +58,12 @@ def confusion_matrix_params():
     Returns:
         confusion_matrix_params : Dict of confusion matrix parmas
     """
-    confusion_matrix_param = {
+    return {
         "actuals": ["1", "2", "3", "4"],
         "preds": ["2", "3", "4", "0"],
         "classes": ["dummy", "dummy"],
         "url": "minio://dummy_bucket/folder_name",
     }
-    return confusion_matrix_param
 
 
 def generate_visualization(viz_params: dict):  #pylint: disable=redefined-outer-name
@@ -184,22 +180,20 @@ def test_accuracy_metric(viz_params):  #pylint: disable=redefined-outer-name
     assert data["metrics"][0]["numberValue"] == viz_params["test_accuracy"]
 
 
-def test_markdown_storage_invalid_datatype(viz_params):  #pylint: disable=redefined-outer-name
+def test_markdown_storage_invalid_datatype(viz_params):    #pylint: disable=redefined-outer-name
     """Test for passing invalid markdown storage datatype."""
     viz_params["markdown"]["storage"] = ["test"]
-    expected_exception_msg = (
-        r"storage must be of type <class 'str'> but received as {}".format(
-            type(viz_params["markdown"]["storage"])))
+    expected_exception_msg = f"""storage must be of type <class 'str'> but received as {type(viz_params["markdown"]["storage"])}"""
+
     with pytest.raises(TypeError, match=expected_exception_msg):
         generate_visualization(viz_params)
 
 
-def test_markdown_source_invalid_datatype(viz_params):  #pylint: disable=redefined-outer-name
+def test_markdown_source_invalid_datatype(viz_params):    #pylint: disable=redefined-outer-name
     """Test for passing invalid markdown source datatype."""
     viz_params["markdown"]["source"] = "test"
-    expected_exception_msg = (
-        r"source must be of type <class 'dict'> but received as {}".format(
-            type(viz_params["markdown"]["source"])))
+    expected_exception_msg = f"""source must be of type <class 'dict'> but received as {type(viz_params["markdown"]["source"])}"""
+
     with pytest.raises(TypeError, match=expected_exception_msg):
         generate_visualization(viz_params)
 
@@ -211,10 +205,10 @@ def test_markdown_source_invalid_datatype(viz_params):  #pylint: disable=redefin
         "storage",
     ],
 )
-def test_markdown_source_missing_key(viz_params, markdown_key):  #pylint: disable=redefined-outer-name
+def test_markdown_source_missing_key(viz_params, markdown_key):    #pylint: disable=redefined-outer-name
     """Test with markdown source missing keys."""
     del viz_params["markdown"][markdown_key]
-    expected_exception_msg = r"Missing mandatory key - {}".format(markdown_key)
+    expected_exception_msg = f"Missing mandatory key - {markdown_key}"
     with pytest.raises(ValueError, match=expected_exception_msg):
         generate_visualization(viz_params)
 

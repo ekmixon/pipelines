@@ -46,14 +46,14 @@ def patch_pod_metadata(
     patch = {
         'metadata': patch
     }
-    for retry in range(patch_retries):
+    for _ in range(patch_retries):
         try:
-            pod = k8s_api.patch_namespaced_pod(
+            return k8s_api.patch_namespaced_pod(
                 name=pod_name,
                 namespace=namespace,
                 body=patch,
             )
-            return pod
+
         except Exception as e:
             print(e)
             sleep(sleep_time)
@@ -93,24 +93,17 @@ def is_s3_endpoint(endpoint: str) -> bool:
     return re.search('^.*s3.*amazonaws.com.*$', endpoint)
 
 def get_object_store_provider(endpoint: str) -> bool:
-    if is_s3_endpoint(endpoint):
-        return 's3'
-    else:
-        return 'minio'
+    return 's3' if is_s3_endpoint(endpoint) else 'minio'
 
 def argo_artifact_to_uri(artifact: dict) -> str:
-    # s3 here means s3 compatible object storage. not AWS S3.
-    if 's3' in artifact:
-        s3_artifact = artifact['s3']
-        return '{provider}://{bucket}/{key}'.format(
-            provider=get_object_store_provider(s3_artifact['endpoint']),
-            bucket=s3_artifact.get('bucket', ''),
-            key=s3_artifact.get('key', ''),
-        )
-    elif 'raw' in artifact:
+    if 's3' not in artifact:
         return None
-    else:
-        return None
+    s3_artifact = artifact['s3']
+    return '{provider}://{bucket}/{key}'.format(
+        provider=get_object_store_provider(s3_artifact['endpoint']),
+        bucket=s3_artifact.get('bucket', ''),
+        key=s3_artifact.get('key', ''),
+    )
 
 
 def is_tfx_pod(pod) -> bool:

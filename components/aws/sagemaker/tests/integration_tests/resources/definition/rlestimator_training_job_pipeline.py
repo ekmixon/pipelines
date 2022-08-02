@@ -47,5 +47,5 @@ def rlestimator_training_toolkit_pipeline_test(
 
 if __name__ == "__main__":
     kfp.compiler.Compiler().compile(
-        rlestimator_training_toolkit_pipeline_test, __file__ + ".zip"
+        rlestimator_training_toolkit_pipeline_test, f"{__file__}.zip"
     )

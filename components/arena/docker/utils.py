@@ -28,11 +28,11 @@ def submit_job(command):
   except subprocess.CalledProcessError as exc:
     print("Status : FAIL", exc.returncode, exc.output)
     sys.exit(-1)
-  logging.info('Submit Job: %s.' % result)
+  logging.info(f'Submit Job: {result}.')
 
 def _is_active_status(status):
-    logging.info("status: {0}".format(status))
-    return status == 'PENDING' or status == 'RUNNING'
+  logging.info("status: {0}".format(status))
+  return status in ['PENDING', 'RUNNING']
 
 def _is_pending_status(status):
     logging.info("status: {0}".format(status))
@@ -65,7 +65,7 @@ def wait_job_running(name, job_type, timeout):
   logging.info("job {0} with type {1} status is {2}".format(name, job_type, status))
 
 def job_logging(name, job_type):
-  logging_cmd = "arena logs -f %s" % (name)
+  logging_cmd = f"arena logs -f {name}"
   process = Popen(split(logging_cmd), stdout = PIPE, stderr = PIPE, encoding='utf8')
   while True:
     output = process.stdout.readline()
@@ -74,35 +74,34 @@ def job_logging(name, job_type):
     if output:
       # print("", output.strip())
       logging.info(output.strip())
-  rc = process.poll()
-  return rc
+  return process.poll()
 
 def collect_metrics(name, job_type, metric_name):
   metrics_cmd = "arena logs --tail=50 %s | grep -e '%s=' -e '%s:' | tail -1" % (name, metric_name, metric_name)
   metric = 0
-  logging.info("search metric_name %s" % (metric_name))
+  logging.info(f"search metric_name {metric_name}")
   try:
     import re
     output = subprocess.check_output(metrics_cmd, stderr=subprocess.STDOUT, shell=True)
     result = output.decode().strip()
     split_unit=''
-    if metric_name+"=" in result:
-        split_unit="="
-    elif metric_name+":" in result:
-        split_unit=":"
+    if f"{metric_name}=" in result:
+      split_unit="="
+    elif f"{metric_name}:" in result:
+      split_unit=":"
     else:
-        return 0
-    array = result.split("%s%s" % (metric_name, split_unit))
+      return 0
+    array = result.split(f"{metric_name}{split_unit}")
     if len(array) > 0:
       logging.info(array)
       result = re.findall(r'\d+\.*\d*',array[-1])
       if len(result) > 0:
         metric = float(result[0])
       else:
-        logging.warning("Failed to parse metric from %s" % (array[-1]))
+        logging.warning(f"Failed to parse metric from {array[-1]}")
         metric = 0
   except Exception as e:
-    logging.warning("Failed to get job status due to" + e)
+    logging.warning(f"Failed to get job status due to{e}")
     return 0
 
   return metric
@@ -115,17 +114,17 @@ def get_job_status(name, job_type):
     status = output.decode()
     status = status.strip()
   except subprocess.CalledProcessError as e:
-    logging.warning("Failed to get job status due to" + e)
+    logging.warning(f"Failed to get job status due to{e}")
 
   return status
 
 def _get_tensorboard_url(name, job_type):
-  get_cmd = "arena get %s --type %s | tail -1" % (name, job_type)
+  get_cmd = f"arena get {name} --type {job_type} | tail -1"
   url = "N/A"
   try:
     output = subprocess.check_output(get_cmd, stderr=subprocess.STDOUT, shell=True)
     url = output.decode()
   except subprocess.CalledProcessError as e:
-    logging.warning("Failed to get job status due to" + e)
+    logging.warning(f"Failed to get job status due to{e}")
 
   return url

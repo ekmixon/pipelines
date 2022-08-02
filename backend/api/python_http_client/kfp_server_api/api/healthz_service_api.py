@@ -62,7 +62,7 @@ class HealthzServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.get_healthz_with_http_info(**kwargs)  # noqa: E501
 
-    def get_healthz_with_http_info(self, **kwargs):  # noqa: E501
+    def get_healthz_with_http_info(self, **kwargs):    # noqa: E501
         """Get healthz data.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -93,15 +93,11 @@ class HealthzServiceApi(object):
         local_var_params = locals()
 
         all_params = [
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -118,15 +114,13 @@ class HealthzServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501

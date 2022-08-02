@@ -44,7 +44,10 @@ def split_table_into_folds(
     max_number_of_folds = 5
 
     if number_of_folds < 1 or number_of_folds > max_number_of_folds:
-        raise ValueError('Number of folds must be between 1 and {}.'.format(max_number_of_folds))
+        raise ValueError(
+            f'Number of folds must be between 1 and {max_number_of_folds}.'
+        )
+
 
     df = pandas.read_csv(
         table_path,
@@ -55,7 +58,7 @@ def split_table_into_folds(
         random_state=random_seed,
     )
     folds = list(splitter.split(df))
-    
+
     fold_paths = [
         (train_1_path, test_1_path),
         (train_2_path, test_2_path),
@@ -71,8 +74,8 @@ def split_table_into_folds(
             train_fold = df.iloc[train_indices]
             test_fold = df.iloc[test_indices]
         else:
-            train_fold = df.iloc[0:0]
-            test_fold = df.iloc[0:0]
+            train_fold = df.iloc[:0]
+            test_fold = df.iloc[:0]
         train_fold.to_csv(train_path, index=False)
         test_fold.to_csv(test_path, index=False)
 

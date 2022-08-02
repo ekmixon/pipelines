@@ -64,7 +64,7 @@ class ExperimentServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.archive_experiment_with_http_info(id, **kwargs)  # noqa: E501
 
-    def archive_experiment_with_http_info(self, id, **kwargs):  # noqa: E501
+    def archive_experiment_with_http_info(self, id, **kwargs):    # noqa: E501
         """Archives an experiment and the experiment's runs and jobs.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -97,16 +97,12 @@ class ExperimentServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'id'
+            'id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -129,15 +125,13 @@ class ExperimentServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -186,7 +180,7 @@ class ExperimentServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.create_experiment_with_http_info(body, **kwargs)  # noqa: E501
 
-    def create_experiment_with_http_info(self, body, **kwargs):  # noqa: E501
+    def create_experiment_with_http_info(self, body, **kwargs):    # noqa: E501
         """Creates a new experiment.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -219,16 +213,12 @@ class ExperimentServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'body'
+            'body',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -249,17 +239,13 @@ class ExperimentServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
-        body_params = None
-        if 'body' in local_var_params:
-            body_params = local_var_params['body']
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        body_params = local_var_params.get('body')
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # HTTP header `Content-Type`
         header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
@@ -312,7 +298,7 @@ class ExperimentServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.delete_experiment_with_http_info(id, **kwargs)  # noqa: E501
 
-    def delete_experiment_with_http_info(self, id, **kwargs):  # noqa: E501
+    def delete_experiment_with_http_info(self, id, **kwargs):    # noqa: E501
         """Deletes an experiment without deleting the experiment's runs and jobs. To avoid unexpected behaviors, delete an experiment's runs and jobs before deleting the experiment.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -345,16 +331,12 @@ class ExperimentServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'id'
+            'id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -377,15 +359,13 @@ class ExperimentServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -434,7 +414,7 @@ class ExperimentServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.get_experiment_with_http_info(id, **kwargs)  # noqa: E501
 
-    def get_experiment_with_http_info(self, id, **kwargs):  # noqa: E501
+    def get_experiment_with_http_info(self, id, **kwargs):    # noqa: E501
         """Finds a specific experiment by ID.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -467,16 +447,12 @@ class ExperimentServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'id'
+            'id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -499,15 +475,13 @@ class ExperimentServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -566,7 +540,7 @@ class ExperimentServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.list_experiment_with_http_info(**kwargs)  # noqa: E501
 
-    def list_experiment_with_http_info(self, **kwargs):  # noqa: E501
+    def list_experiment_with_http_info(self, **kwargs):    # noqa: E501
         """Finds all experiments. Supports pagination, and sorting on certain fields.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -614,16 +588,12 @@ class ExperimentServiceApi(object):
             'sort_by',
             'filter',
             'resource_reference_key_type',
-            'resource_reference_key_id'
+            'resource_reference_key_id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -652,15 +622,13 @@ class ExperimentServiceApi(object):
         if 'resource_reference_key_id' in local_var_params and local_var_params['resource_reference_key_id'] is not None:  # noqa: E501
             query_params.append(('resource_reference_key.id', local_var_params['resource_reference_key_id']))  # noqa: E501
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501
@@ -709,7 +677,7 @@ class ExperimentServiceApi(object):
         kwargs['_return_http_data_only'] = True
         return self.unarchive_experiment_with_http_info(id, **kwargs)  # noqa: E501
 
-    def unarchive_experiment_with_http_info(self, id, **kwargs):  # noqa: E501
+    def unarchive_experiment_with_http_info(self, id, **kwargs):    # noqa: E501
         """Restores an archived experiment. The experiment's archived runs and jobs will stay archived.  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
@@ -742,16 +710,12 @@ class ExperimentServiceApi(object):
         local_var_params = locals()
 
         all_params = [
-            'id'
+            'id',
+            'async_req',
+            '_return_http_data_only',
+            '_preload_content',
+            '_request_timeout',
         ]
-        all_params.extend(
-            [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout'
-            ]
-        )
 
         for key, val in six.iteritems(local_var_params['kwargs']):
             if key not in all_params:
@@ -774,15 +738,13 @@ class ExperimentServiceApi(object):
 
         query_params = []
 
-        header_params = {}
-
         form_params = []
         local_var_files = {}
 
         body_params = None
-        # HTTP header `Accept`
-        header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json'])  # noqa: E501
+        header_params = {
+            'Accept': self.api_client.select_header_accept(['application/json'])
+        }
 
         # Authentication setting
         auth_settings = ['Bearer']  # noqa: E501

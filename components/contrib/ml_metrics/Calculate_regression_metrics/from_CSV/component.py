@@ -29,7 +29,10 @@ def calculate_regression_metrics_from_csv(
         raise NotImplemented('Only single true values are supported.')
 
     if predicted_values.shape != true_values.shape:
-        raise ValueError('Input shapes are different: {} != {}'.format(predicted_values.shape, true_values.shape))
+        raise ValueError(
+            f'Input shapes are different: {predicted_values.shape} != {true_values.shape}'
+        )
+
 
     number_of_items = true_values.size
     errors = (true_values - predicted_values)
